@@ -7,10 +7,9 @@ export default function () {
     return (
         <>
             <header
-                className={`bg-transparent absolute top-0 left-0 w-full flex items-center z-10 bg-primary h-12`}>
+                className={`absolute top-0 left-0 w-full flex items-center z-10 bg-primary h-12`}>
                 <div className="container">
                     <div className="flex items-center justify-between relative">
-
                         <Link to={'/'} className={'font-bold text-lg text-white block py-2'}>BST Visualization</Link>
                         <div className="flex items-center px-4">
                             <nav

@@ -1,7 +1,14 @@
-.container {
-    width: 80%;
-    margin-right: auto;
+.container-editor {
+    max-width: 60%;
+    height: 540px;
+    width: 60%;
     margin-left: auto;
+    margin-right: auto;
+    overflow: scroll;
+}
+
+.active{
+    display: inline-block;
 }
 
 .tree {
@@ -63,6 +70,7 @@ input {
 .tf-custom .tf-nc {
     height: 2rem;
     width: 2rem;
+    padding: 20px;
     border-radius: 50%;
     border: none;
     background: dodgerblue;

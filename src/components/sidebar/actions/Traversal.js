@@ -1,6 +1,6 @@
 import {Icon} from "@iconify/react/dist/iconify";
 
-export default function (){
+export default function (props){
     return (
         <li>
             <a href="#"
