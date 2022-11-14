@@ -1,28 +1,29 @@
-import './App.css';
-import Navbar from "./components/navbar/Navbar";
-import Sidebar from "./components/sidebar/Sidebar";
-import Editor from "./pages/Editor"
-import BinarySearchTree from "./data/BinarySearchTree";
-import Log from "./data/Log"
-
-/*let logs = ""*/
+import './App.css'
+import Home from "./pages/home/Home"
+import Register from "./pages/auth/Register"
+import {Route, Routes} from 'react-router-dom'
+import Dashboard from "./pages/dashboard/Dashboard"
+import EditorPage from "./pages/editor/EditorPage"
+import Login from "./pages/auth/Login";
 
 function App() {
 
-    const l = new Log()
-    const bst = new BinarySearchTree(l)
-
-    bst.add(100)
-
     return (
         <>
-            <Navbar/>
-        {/*    <Sidebar bst={bst}/>*/}
-         {/*   <Log/>*/}
-            <Editor bst={bst}/>
+            {/*<Navbar/>*/}
+            <Routes>
+                <Route path="/" element={<Home/>}/>
+                <Route path={'/register'} element={<Register/>}/>
+                <Route path={'/login'} element={<Login/>}/>
+                <Route path={"/dashboard"} element={<Dashboard/>}/>
+                <Route path={'/dashboard/editor/:id'} element={<EditorPage/>}/>
+            </Routes>
+            {/*    <Sidebar bst={bst}/>*/}
+            {/*   <Log/>*/}
+            {/*<EditorPage bst={bst}/>*/}
 
         </>
-    );
+    )
 }
 
-export default App;
+export default App

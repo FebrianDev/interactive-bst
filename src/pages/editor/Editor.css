@@ -73,6 +73,7 @@ input {
     padding: 20px;
     border-radius: 50%;
     border: none;
+    transition: 5s ease-in;
     background: dodgerblue;
     display: flex;
     justify-content: center;

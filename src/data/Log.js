@@ -1,12 +1,7 @@
 export default class Log {
     constructor() {
         this.logList = []
-        this.logData = null
-    }
-
-    getLog() {
-        var ths = this
-        return ths.logs
+        this.logs = ""
     }
 
     getLogList() {
@@ -14,22 +9,44 @@ export default class Log {
         return ths.logList
     }
 
+    getLog(){
+        var ths = this
+        return ths.logs
+    }
+
     logInsert(data) {
         var ths = this
-        ths.logs += `,Insert(${data})`
-        ths.logList.push(`Insert(${data})`)
+        ths.logs += `insert:${data},`
+        ths.logList.push(`insert(${data})`)
     }
 
     logDelete(data) {
         var ths = this
-        ths.logs += `,Delete(${data})`
-        ths.logList.push(`Delete(${data})`)
+        ths.logs += `delete:${data},`
+        ths.logList.push(`delete(${data})`)
     }
 
-    logSearch(data){
+    logSearch(data) {
         var ths = this
-        ths.logs += `,Search(${data})`
-        ths.logList.push(`Search(${data})`)
+        ths.logs += `search:${data},`
+        ths.logList.push(`search(${data})`)
     }
 
+    logPreOrder() {
+        var ths = this
+        ths.logs += `preorder,`
+        ths.logList.push(`preorder()`)
+    }
+
+    logPostOrder() {
+        var ths = this
+        ths.logs += `postorder,`
+        ths.logList.push(`postorder()`)
+    }
+
+    logInOrder() {
+        var ths = this
+        ths.logs += `inorder,`
+        ths.logList.push(`inorder()`)
+    }
 }

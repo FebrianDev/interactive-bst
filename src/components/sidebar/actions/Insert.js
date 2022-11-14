@@ -1,6 +1,6 @@
 import {Icon} from "@iconify/react/dist/iconify"
 import React from "react"
-import Editor from "../../../pages/Editor";
+import Editor from "../../../pages/editor/EditorPage";
 
 export default function () {
 
