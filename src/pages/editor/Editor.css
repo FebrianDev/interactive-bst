@@ -17,22 +17,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-}
 
-.tree-data::text {
-    color: red;
-}
-
-.tree-left {
-    background: dodgerblue;
-    display: inline-block;
-    width: 10%;
-}
-
-.tree-right {
-    background: darkturquoise;
-    display: inline-block;
-    width: 10%;
 }
 
 .form-control {
@@ -73,9 +58,9 @@ input {
     padding: 20px;
     border-radius: 50%;
     border: none;
-    transition: 5s ease-in;
     background: dodgerblue;
     display: flex;
     justify-content: center;
     align-items: center;
 }
+

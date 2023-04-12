@@ -1,4 +1,4 @@
-import React from "react";
+import React from "react"
 import "./Editor.css"
 export default function Tree(props) {
 
@@ -10,27 +10,29 @@ export default function Tree(props) {
             if (key === 'left' && typeof value === 'object') {
                 if (value !== null) {
                     return (
-                        <li key={value.data}>
-                            <Tree data={value}/>
+                        <li className={"v-active"}>
+                            <p className={"absolute mr-20 mt-2"}>L</p>
+                            <Tree data={value} />
                         </li>
-                    );
+                    )
                 }
                 if (value === null) {
-                    return null;
+                    return null
                 }
             } else if (key === 'right' && typeof value === 'object') {
                 if (value !== null) {
                     return (
-                        <li key={value.data}>
+                        <li>
+                            <p className={"absolute ml-20 mt-2"}>R</p>
                             <Tree data={value}/>
                         </li>
-                    );
+                    )
                 }
                 if (value === null) {
-                    return null;
+                    return null
                 }
             }
-        });
+        })
     }
 
     return data ? (

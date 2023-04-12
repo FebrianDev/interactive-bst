@@ -1,21 +1,30 @@
-export default function Validation(formData, callback) {
-    let formIsValid = true
-    let errors = {}
-    if (formData.name === "") {
-        formIsValid = false
-        errors["name"] = "Name must be filled!"
+function nameValidation(name) {
+    let errors = ""
+    if (name === "") {
+        errors = "Name must be filled!"
     }
-    if (formData.email === "") {
-        formIsValid = false
-        errors["email"] = "Email must be filled!"
-    }
-    if (formData.password === "") {
-        formIsValid = false
-        errors["password"] = "Password must be filled!"
-    }
-    if (!formIsValid) {
-        callback(errors)
-    }
-
-    return formIsValid
+    return errors
 }
+
+function emailValidation(email){
+    let errors = ""
+    const mailFormat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
+    if (email === "") {
+        errors = "Email must be filled!"
+    }else if(!email.match(mailFormat)){
+        errors = "Invalid Email!"
+    }
+    return errors
+}
+
+function passwordValidation(password){
+    let errors = ""
+    if (password === "") {
+        errors = "Password must be filled!"
+    }else if(password.length < 6){
+        errors = "Password must be at least 6 letters"
+    }
+    return errors
+}
+
+export {nameValidation, emailValidation, passwordValidation}

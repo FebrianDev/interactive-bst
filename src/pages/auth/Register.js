@@ -1,12 +1,15 @@
-import {useRef} from "react"
+import {useRef, useState} from "react"
 import {useNavigate} from "react-router-dom"
-import axios from "axios";
+import axios from "axios"
+import {emailValidation, nameValidation, passwordValidation} from "../../helper/validation/Validation"
 
 export default function Register() {
 
     const name = useRef(null)
     const email = useRef(null)
     const password = useRef(null)
+
+    const [errorState, setErrorState] = useState("")
 
     const navigate = useNavigate()
 
@@ -15,6 +18,19 @@ export default function Register() {
         const inputEmail = email.current.value
         const inputPassword = password.current.value
 
+        if (nameValidation(inputName) !== "") {
+            setErrorState(nameValidation(inputName))
+            return
+        } else if (emailValidation(inputEmail) !== "") {
+            setErrorState(emailValidation(inputEmail))
+            return
+        } else if (passwordValidation(inputPassword) !== "") {
+            setErrorState(passwordValidation(inputPassword))
+            return
+        }
+
+        setErrorState("")
+
         const data = {
             name: inputName,
             email: inputEmail,
@@ -22,14 +38,15 @@ export default function Register() {
         }
 
         axios.post("http://localhost:6060/api/register",
-          data,
-           ).then((data) => {
-                console.log('Success:', data)
-                localStorage.setItem("ID", data.data.data.id)
-                navigate("/dashboard")
-            })
+            data,
+        ).then((data) => {
+            console.log('Success:', data)
+            localStorage.setItem("ID", data.data.data.id)
+            navigate("/dashboard")
+        })
             .catch((error) => {
-                console.error('Error:', error)
+                console.error('Error:', error.message)
+                setErrorState(error.message)
                 navigate("/register")
             })
     }
@@ -42,7 +59,7 @@ export default function Register() {
                         className="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
                         <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
                             <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
-                                Create User
+                                Register User
                             </h1>
                             <div className="space-y-4 md:space-y-6">
 
@@ -78,7 +95,7 @@ export default function Register() {
                                         className="w-full text-white bg-primary hover:bg-primary font-medium rounded-lg text-sm px-5 py-2.5 text-center">Register
                                 </button>
 
-                                <p className={'text-red-500'}>Error</p>
+                                <p className={'text-red-500'}>{errorState}</p>
 
                                 <p className="text-sm font-light text-gray-500 dark:text-gray-400">
                                     Already have an account? <a href="/login"

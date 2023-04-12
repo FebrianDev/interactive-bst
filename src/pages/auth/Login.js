@@ -1,17 +1,30 @@
-import {useRef} from "react"
+import {useRef, useState} from "react"
 import {useNavigate} from "react-router-dom"
 import axios from "axios"
+import {emailValidation, passwordValidation} from "../../helper/validation/Validation";
 
 export default function Login() {
 
     const email = useRef(null)
     const password = useRef(null)
 
+    const [errorState, setErrorState] = useState("")
+
     const navigate = useNavigate()
 
     function submitRegister() {
         const inputEmail = email.current.value
         const inputPassword = password.current.value
+
+        if (emailValidation(inputEmail) !== "") {
+            setErrorState(emailValidation(inputEmail))
+            return
+        } else if (passwordValidation(inputPassword) !== "") {
+            setErrorState(passwordValidation(inputPassword))
+            return
+        }
+
+        setErrorState("")
 
         const data = {
             email: inputEmail,
@@ -71,7 +84,7 @@ export default function Login() {
                                         className="w-full text-white bg-primary hover:bg-primary font-medium rounded-lg text-sm px-5 py-2.5 text-center">Login
                                 </button>
 
-                                <p className={'text-red-500'}>Error</p>
+                                <p className={'text-red-500'}>{errorState}</p>
 
                                 <p className="text-sm font-light text-gray-500 dark:text-gray-400">
                                     Don't have an account?<a href="/register"

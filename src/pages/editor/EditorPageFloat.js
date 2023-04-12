@@ -1,19 +1,19 @@
-import React, {useRef, useState} from "react"
-import "./Editor.css"
-import Tree from "./Render"
-import {Icon} from "@iconify/react/dist/iconify"
-import generateJS from "../../data/generate/GenerateSourceCodeJS"
+import BinarySearchTree from "../../data/BinarySearchTree";
 import {useLocation} from "react-router-dom";
-import BinarySearchTree from "../../data/BinarySearchTree"
-import axios from 'axios'
-import GenerateSourceCode from "./GenerateSourceCode";
+import React, {useRef, useState} from "react";
+import axios from "axios";
+import Swal from "sweetalert2";
+import {Icon} from "@iconify/react/dist/iconify";
+import generateSourceCodeC from "../../data/generate/GenerateSourceCodeC";
 import generateSourceCodeCpp from "../../data/generate/GenerateSourceCodeCpp";
 import generateSourceCodeJava from "../../data/generate/GenerateSourceCodeJava";
+import generateJS from "../../data/generate/GenerateSourceCodeJS";
+import GenerateSourceCode from "./GenerateSourceCode";
+import Tree from "./Render";
 
 const bst = new BinarySearchTree()
 
-export default function EditorPage() {
-
+export default function EditorPageFloat() {
     const location = useLocation()
     const pathname = location.pathname.split('/')[3]
 
@@ -23,76 +23,77 @@ export default function EditorPage() {
 
     const [root, setRoot] = React.useState([])
     const [logList, setLogList] = React.useState([])
-    const [showLog, setShowLog] = useState(null)
-    const [print, setPrint] = React.useState([])
     const [generate, setGenerate] = useState(null)
     const [language, setLanguage] = useState(null)
 
     const [showModal, setShowModal] = React.useState("hidden")
-    let i = 1
+    let i = 0
     React.useEffect(() => {
+        if (root.length > 0 || i > 0) return
 
-        if(root.length > 0 ) return
-
+        bst.clearExplain()
         axios.get(`http://localhost:6060/api/project/id/${pathname}`, {}).then(
             (data) => {
-                console.log(data)
+                if (root.length > 0 || i > 0) return
                 const operation = data.data.data.bst_operation
-
                 if (operation === "") return
 
                 const splitBst = operation.split(',')
-                console.log("Split "+splitBst.length)
 
                 splitBst.map(data => {
-                    if(splitBst.length === i) return;
-                    console.log("Split "+splitBst.length+" "+i)
-                    if (data === "preorder") preOrder()
-                    else if (data === "postorder") postOrder()
-                    else if (data === "inorder") inOrder()
+                    // eslint-disable-next-line array-callback-return
+                    if (splitBst.length === (i + 1)) return
+
+                    if (data === "preorder") preOrderAwake()
+                    else if (data === "postorder") postOrderAwake()
+                    else if (data === "inorder") inOrderAwake()
                     else {
                         const key = data.split(':')[0]
                         const value = data.split(':')[1]
 
-                        console.log("Inc "+i)
-
-                        if (key === "insert") {insert(value); console.log("insert")}
-                        else if (key === "delete") {deleteAwake(value); }
-                        else if (key === "search") searchAwake(value)
+                        if (key === "insert") {
+                            insert(value);
+                            console.log("insert")
+                        } else if (key === "delete") {
+                            deleteAwake(value);
+                        } else if (key === "search") searchAwake(value)
                     }
 
                     i++
                 })
+
+                bst.clearExplain()
             })
-        //  setRoot((prev) => ({...prev, ...bst.root}))
     }, [])
 
     function insert(data) {
-        bst.insert(parseInt(data))
+        bst.clearExplain()
+        bst.insert(parseFloat(data))
         setRoot((prev) => ({...prev, ...bst.root}))
         setLogList(bst.getLogList())
-
-        console.log(bst.getLogList())
     }
 
     function deleteAwake(data) {
-        bst.delete(parseInt(data))
+        bst.clearExplain()
+        bst.delete(parseFloat(data))
         setRoot((prev) => ({...prev, ...bst.root}))
         setLogList(bst.getLogList())
     }
 
     function searchAwake(data) {
-        console.log("Search "+data)
-        bst.search(bst.getRootNode(), parseInt(data))
+        bst.clearExplain()
+        bst.search(bst.getRootNode(), parseFloat(data))
         setLogList(bst.getLogList())
     }
 
     function Insert() {
-        const data = parseInt(refInsert.current.value)
+        bst.clearExplain()
+        const data = parseFloat(refInsert.current.value)
         if (isNaN(data)) {
             alert("Input Invalid")
             return
         }
+        showAlert("Success", "Success Insert Data")
         bst.insert(data)
         setRoot((prev) => ({...prev, ...bst.root}))
         updateLog()
@@ -100,11 +101,14 @@ export default function EditorPage() {
     }
 
     function Delete() {
-        const data = parseInt(refDelete.current.value)
+
+        bst.clearExplain()
+        const data = parseFloat(refDelete.current.value)
         if (isNaN(data)) {
             alert("Input Invalid")
             return
         }
+        showAlert("Success", "Success Delete Data")
         bst.delete(data)
         setRoot((prev) => ({...prev, ...bst.root}))
         updateLog()
@@ -112,43 +116,67 @@ export default function EditorPage() {
     }
 
     function Search() {
-        const data = parseInt(refSearch.current.value)
+
+        bst.clearExplain()
+        const data = parseFloat(refSearch.current.value)
         if (isNaN(data)) {
             alert("Input Invalid")
             return
         }
 
         const finalData = bst.search(bst.getRootNode(), data)
-        if (finalData === null) alert("Data is null!")
-        else {
-            alert(finalData)
+        if (finalData !== "") {
+            showAlert("Success", `Data is found ${finalData}`)
             updateLog()
+        } else {
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Data is not found!',
+            })
         }
 
         refSearch.current.value = ""
     }
 
+    function preOrderAwake() {
+        bst.clearList()
+        bst.preorder(bst.getRootNode())
+        bst.getListPreOrder()
+    }
+
+    function postOrderAwake() {
+        bst.clearList()
+        bst.postorder(bst.getRootNode())
+        bst.getListPostOrder()
+    }
+
+    function inOrderAwake() {
+        bst.clearList()
+        bst.inorder(bst.getRootNode())
+        bst.getListInOrder()
+    }
+
     function preOrder() {
         bst.clearList()
-        setPrint([])
         bst.preorder(bst.getRootNode())
-        setPrint(bst.getListPreOrder())
+        showAlert("Preorder", bst.getListPreOrder())
         updateLog()
     }
 
     function postOrder() {
         bst.clearList()
-        setPrint([])
+
         bst.postorder(bst.getRootNode())
-        setPrint(bst.getListPostOrder())
+        showAlert("Postorder", bst.getListPostOrder())
         updateLog()
     }
 
     function inOrder() {
         bst.clearList()
-        setPrint([])
+
         bst.inorder(bst.getRootNode())
-        setPrint(bst.getListInOrder())
+        showAlert("Inorder", bst.getListInOrder())
         updateLog()
     }
 
@@ -156,7 +184,7 @@ export default function EditorPage() {
         console.log(bst.getLogList())
         setLogList(bst.getLogList())
         const final = bst.getLog()
-        setShowLog(final)
+        console.log("Final" + final)
         const update = {bst_operation: final}
         axios.put(`http://localhost:6060/api/project/id/${pathname}`, update)
             .then(
@@ -191,6 +219,15 @@ export default function EditorPage() {
         setSearchActive(searchActive)
         setTraversalActive(traversalActive)
         setExportActive(exportActive)
+    }
+
+    function showAlert(title, message) {
+        Swal.fire({
+            title: title,
+            text: message,
+            icon: "success",
+            confirmButtonText: "OK",
+        })
     }
 
     return (
@@ -358,7 +395,7 @@ export default function EditorPage() {
                         {/*Export C Start*/}
                         <li className={"border-b-2 border-white"}>
                             <a
-                                onClick={exportCode.bind(this, generateSourceCodeCpp(logList), "c")}
+                                onClick={exportCode.bind(this, generateSourceCodeC(logList), "c")}
                                 className="flex items-center p-2 text-base font-normal text-gray-900 dark:text-white hover:bg-dark">
                                 <span
                                     className="flex-1 ml-3 whitespace-nowrap text-white text-bold">C</span></a>
@@ -400,7 +437,7 @@ export default function EditorPage() {
             </aside>
             {/*Export Child End*/}
 
-            <h3 className={"ml-40 mr-40 mt-72 inline-block fixed top-1/2 font-bold text-lg w-full"}>{print.map(data => " " + data)}</h3>
+            {/* <h3 className={"ml-40 mr-40 mt-72 inline-block fixed top-1/2 font-bold text-lg w-full"}>{print.map(data => " " + data)}</h3>*/}
 
             {/*Modal Generate Source Code Start*/}
             <div id="defaultModal" tabIndex="-1" aria-hidden="true"
@@ -430,16 +467,28 @@ export default function EditorPage() {
 
             {/*Render*/}
             <div className="container-editor relative mt-32">
-                <div className="tf-tree tf-custom">
+
+                {<div className="tf-tree tf-custom">
                     <ul>
-                        <li>
+                        <li className={"transition ease-in-out delay-1150"}>
                             <Tree data={root}/>
                         </li>
                     </ul>
-                </div>
+                </div>}
             </div>
             {/*Render*/}
 
+            {/*List Start*/}
+            <ul className="list-disc w-72 h-96 p-2 fixed top-0 right-1 overflow-scroll mt-32">
+                <h2 className={"font-bold"}>Explain</h2>
+                {bst.getExplain().map((explain) =>
+                    <li>{explain}</li>
+                )}
+
+            </ul>
+            {/*List End*/}
+
+            {/*Logging Start*/}
             <aside className="w-36 fixed bottom-0 right-0 overflow-scroll h-48 bg-primary" aria-label="Sidebar">
                 <div className="bg-primary p-2">
                     <h2 className={'text-white font-bold text-sm text-center'}>Log</h2>
@@ -447,9 +496,8 @@ export default function EditorPage() {
                     {logList.map((l) => <h3 key={l} className={"text-white font-bold text-sm text-center"}>{l}</h3>)}
                 </div>
             </aside>
+            {/*Logging End*/}
 
         </>
     )
 }
-
-
