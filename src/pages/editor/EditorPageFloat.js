@@ -32,7 +32,7 @@ export default function EditorPageFloat() {
         if (root.length > 0 || i > 0) return
 
         bst.clearExplain()
-        axios.get(`http://localhost:6060/api/project/id/${pathname}`, {}).then(
+        axios.get(`https://interactive-bst-backend-production.up.railway.app/api/project/id/${pathname}`, {}).then(
             (data) => {
                 if (root.length > 0 || i > 0) return
                 const operation = data.data.data.bst_operation
@@ -90,10 +90,11 @@ export default function EditorPageFloat() {
         bst.clearExplain()
         const data = parseFloat(refInsert.current.value)
         if (isNaN(data)) {
-            alert("Input Invalid")
+            showAlertError('Data tidak ditemukan!')
+            refInsert.current.value = ""
             return
         }
-        showAlert("Success", "Success Insert Data")
+        showAlert("Success", "Berhasil Insert Data")
         bst.insert(data)
         setRoot((prev) => ({...prev, ...bst.root}))
         updateLog()
@@ -105,11 +106,15 @@ export default function EditorPageFloat() {
         bst.clearExplain()
         const data = parseFloat(refDelete.current.value)
         if (isNaN(data)) {
-            alert("Input Invalid")
+            showAlertError('Data tidak ditemukan!')
+            refInsert.current.value = ""
             return
         }
-        showAlert("Success", "Success Delete Data")
         bst.delete(data)
+        if (bst.deleteFail)
+            showAlertError('Data tidak ditemukan!')
+        else
+            showAlert("Success", "Berhasil Delete Data")
         setRoot((prev) => ({...prev, ...bst.root}))
         updateLog()
         refDelete.current.value = ""
@@ -120,20 +125,17 @@ export default function EditorPageFloat() {
         bst.clearExplain()
         const data = parseFloat(refSearch.current.value)
         if (isNaN(data)) {
-            alert("Input Invalid")
+            showAlertError("Input tidak valid!")
+            refInsert.current.value = ""
             return
         }
 
         const finalData = bst.search(bst.getRootNode(), data)
         if (finalData !== "") {
-            showAlert("Success", `Data is found ${finalData}`)
+            showAlert("Success", `Data ${finalData} ditemukan`)
             updateLog()
         } else {
-            Swal.fire({
-                icon: 'error',
-                title: 'Oops...',
-                text: 'Data is not found!',
-            })
+            showAlertError('Data tidak ditemukan!')
         }
 
         refSearch.current.value = ""
@@ -159,6 +161,7 @@ export default function EditorPageFloat() {
 
     function preOrder() {
         bst.clearList()
+        bst.clearExplain()
         bst.preorder(bst.getRootNode())
         showAlert("Preorder", bst.getListPreOrder())
         updateLog()
@@ -166,7 +169,7 @@ export default function EditorPageFloat() {
 
     function postOrder() {
         bst.clearList()
-
+        bst.clearExplain()
         bst.postorder(bst.getRootNode())
         showAlert("Postorder", bst.getListPostOrder())
         updateLog()
@@ -174,7 +177,7 @@ export default function EditorPageFloat() {
 
     function inOrder() {
         bst.clearList()
-
+        bst.clearExplain()
         bst.inorder(bst.getRootNode())
         showAlert("Inorder", bst.getListInOrder())
         updateLog()
@@ -186,7 +189,7 @@ export default function EditorPageFloat() {
         const final = bst.getLog()
         console.log("Final" + final)
         const update = {bst_operation: final}
-        axios.put(`http://localhost:6060/api/project/id/${pathname}`, update)
+        axios.put(`https://interactive-bst-backend-production.up.railway.app/api/project/id/${pathname}`, update)
             .then(
                 response => console.log(response.data.status)
             )
@@ -227,6 +230,14 @@ export default function EditorPageFloat() {
             text: message,
             icon: "success",
             confirmButtonText: "OK",
+        })
+    }
+
+    function showAlertError(message) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: message,
         })
     }
 
@@ -479,7 +490,7 @@ export default function EditorPageFloat() {
             {/*Render*/}
 
             {/*List Start*/}
-            <ul className="list-disc w-72 h-96 p-2 fixed top-0 right-1 overflow-scroll mt-32">
+            <ul className="list-disc w-80 h-96 p-2 fixed top-0 right-1 overflow-scroll mt-32">
                 <h2 className={"font-bold"}>Explain</h2>
                 {bst.getExplain().map((explain) =>
                     <li>{explain}</li>

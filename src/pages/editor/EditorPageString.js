@@ -34,7 +34,7 @@ export default function EditorPageString() {
         if (root.length > 0) return
 
         bst.clearExplain()
-        axios.get(`http://localhost:6060/api/project/id/${pathname}`, {}).then(
+        axios.get(`https://interactive-bst-backend-production.up.railway.app/api/project/id/${pathname}`, {}).then(
             (data) => {
                 if (root.length > 0 || i > 0) return
                 console.log(data)
@@ -94,7 +94,7 @@ export default function EditorPageString() {
         bst.clearExplain()
         const data = refInsert.current.value.toString()
 
-        showAlert("Success", "Success Insert Data")
+        showAlert("Success", "Berhasil Insert Data")
         bst.insert(data)
         setRoot((prev) => ({...prev, ...bst.root}))
         updateLog()
@@ -106,8 +106,11 @@ export default function EditorPageString() {
 
         bst.clearExplain()
         const data = refDelete.current.value.toString()
-        showAlert("Success", "Success Delete Data")
         bst.delete(data)
+        if (bst.deleteFail)
+            showAlertError('Data tidak ditemukan!')
+        else
+            showAlert("Success", "Berhasil Delete Data")
         setRoot((prev) => ({...prev, ...bst.root}))
         updateLog()
         refDelete.current.value = ""
@@ -120,14 +123,10 @@ export default function EditorPageString() {
 
         const finalData = bst.search(bst.getRootNode(), data)
         if (finalData !== "") {
-            showAlert("Success", `Data is found ${finalData}`)
+            showAlert("Success", `Data ${finalData} ditemukan`)
             updateLog()
         } else {
-            Swal.fire({
-                icon: 'error',
-                title: 'Oops...',
-                text: 'Data is not found!',
-            })
+            showAlertError('Data tidak ditemukan!')
         }
 
         refSearch.current.value = ""
@@ -156,7 +155,7 @@ export default function EditorPageString() {
 
     function preOrder() {
         bst.clearList()
-
+        bst.clearExplain()
         bst.preorder(bst.getRootNode())
         bst.getListPreOrder()
         showAlert("Preorder", bst.getListPreOrder())
@@ -165,7 +164,7 @@ export default function EditorPageString() {
 
     function postOrder() {
         bst.clearList()
-
+        bst.clearExplain()
         bst.postorder(bst.getRootNode())
         bst.getListPostOrder()
         showAlert("Postorder", bst.getListPostOrder())
@@ -174,7 +173,7 @@ export default function EditorPageString() {
 
     function inOrder() {
         bst.clearList()
-
+        bst.clearExplain()
         bst.inorder(bst.getRootNode())
         bst.getListInOrder()
         showAlert("Inorder", bst.getListInOrder())
@@ -186,7 +185,7 @@ export default function EditorPageString() {
         setLogList(bst.getLogList())
         const final = bst.getLog()
         const update = {bst_operation: final}
-        axios.put(`http://localhost:6060/api/project/id/${pathname}`, update)
+        axios.put(`https://interactive-bst-backend-production.up.railway.app/api/project/id/${pathname}`, update)
             .then(
                 response => console.log(response.data.status)
             )
@@ -227,6 +226,14 @@ export default function EditorPageString() {
             text: message,
             icon: "success",
             confirmButtonText: "OK",
+        })
+    }
+
+    function showAlertError(message) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: message,
         })
     }
 
@@ -479,7 +486,7 @@ export default function EditorPageString() {
             {/*Render*/}
 
             {/*List Start*/}
-            <ul className="list-disc w-72 h-96 p-2 fixed top-0 right-1 overflow-scroll mt-32">
+            <ul className="list-disc w-80 h-96 p-2 fixed top-0 right-1 overflow-scroll mt-32">
                 <h2 className={"font-bold"}>Explain</h2>
                 {bst.getExplain().map((explain) =>
                     <li>{explain}</li>

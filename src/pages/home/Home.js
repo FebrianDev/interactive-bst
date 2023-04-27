@@ -20,7 +20,10 @@ export default function () {
                         </div>
 
                         <Link to={'/dashboard'}><span
-                            className={'text-base font-semibold text-white bg-primary py-3 px-8 rounded-full hover:shadow-lg hover:opacity-80 transition duration-300 ease-in-out'}>Dashboard</span></Link>
+                            className={'text-base font-semibold text-white bg-primary py-3 border border-primary px-8 rounded-full hover:shadow-lg hover:opacity-80 transition duration-300 ease-in-out'}>Dashboard</span></Link>
+                        <Link to={'/dashboard'}><span
+                            className={'text-base font-semibold ml-2 text-primary bg-white shadow-xl py-3 px-8 rounded-full hover:shadow-2xl border border-primary hover:opacity-80 transition duration-300 ease-in-out'}>Guidance</span></Link>
+
                     </div>
 
                     {/*    Section Right*/}

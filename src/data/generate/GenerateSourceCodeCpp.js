@@ -5,22 +5,24 @@ export default function (listLog) {
     return `
     
     ${importLib}
-   
-    using namespace std;
-    
-    class Node {
-    public:
-        int data;
-        Node *left, *right;
-    
-        Node(int value) {
-            data = value;
-            left = right = NULL;
-        }
-    };
-    
+
+
+using namespace std;
+
+class Node {
+public:
+    int data;
+    Node *left, *right;
+
+    Node(int value) {
+        data = value;
+        left = right = NULL;
+    }
+};
+
+class BinarySearchTree {
     Node *root = NULL;
-    
+public:
     /*Insert Start*/
     void insertData(Node *&root, int key) {
         Node *node = new Node(key);
@@ -44,21 +46,21 @@ export default function (listLog) {
         else
             prev->right = node;
     }
-    
+
     void insert(int data) {
         insertData(root, data);
     }
+
     /*Insert End*/
-    
-    Node *findMinimum(Node *cur)
-    {
+
+    Node *findMinimum(Node *cur) {
         while (cur->left != NULL) {
             cur = cur->left;
         }
         return cur;
     }
-    
-    /*Delete Start*/
+
+    /*remove Start*/
     void searchData(Node *&cur, int item, Node *&parent) {
         while (cur != NULL && cur->data != item) {
             parent = cur;
@@ -68,16 +70,14 @@ export default function (listLog) {
                 cur = cur->right;
         }
     }
-    
-    void removeData(Node *&root, int item)
-    {
+
+    void removeData(Node *&root, int item) {
         Node *parent = NULL;
         Node *cur = root;
         searchData(cur, item, parent);
         if (cur == NULL)
             return;
-        if (cur->left == NULL && cur->right == NULL)
-        {
+        if (cur->left == NULL && cur->right == NULL) {
             if (cur != root) {
                 if (parent->left == cur)
                     parent->left = NULL;
@@ -103,12 +103,12 @@ export default function (listLog) {
             free(cur);
         }
     }
-    
+
     void remove(int data) {
         removeData(root, data);
     }
-    /*Delete End*/
-    
+    /*remove End*/
+
     /*Inorder start*/
     void inorderRecursive(Node *root) {
         Node *temp = root;
@@ -125,65 +125,67 @@ export default function (listLog) {
             }
         }
     }
-    
+
     void inorder() {
         inorderRecursive(root);
     }
     /*Inorder End*/
-    
+
     /*Preorder Start*/
     void preorder_recursive(Node *node) {
         if (node == NULL)return;
-    
+
         cout << node->data << " ";
         preorder_recursive(node->left);
         preorder_recursive(node->right);
     }
-    
+
     void preorder() {
         preorder_recursive(root);
     }
     /*Preorder End*/
-    
+
     /*Postorder Start*/
     void postorder_recursive(struct Node *node) {
         if (node == NULL)
             return;
         postorder_recursive(node->left);
-    
+
         postorder_recursive(node->right);
-    
+
         cout << node->data << " ";
     }
-    
+
     void postorder() {
         postorder_recursive(root);
     }
     /*Postorder End*/
-    
+
     /*Search Start*/
     Node *search_recursive(Node *node, int key) {
-    
+
         if (node == NULL || node->data == key)
             return node;
-    
+
         if (node->data > key)
             return search_recursive(node->left, key);
-    
+
         return search_recursive(node->right, key);
-    
+
     }
-    
-    void search(int data){
+
+    void search(int data) {
         root = search_recursive(root, data);
-        if(root != NULL){
-            cout<<root->data;
+        if (root != NULL) {
+            cout << root->data;
         }
     }
     /*Search End*/
+};
     
     int main() {
-         ${listLog.map(d => "bst."+d.toString()+";\n\t").toString().replace(/,/g, "")}
+         BinarySearchTree bst = BinarySearchTree();
+         ${listLog.map(d => "bst." + d.toString() + ";\n\t").toString().replace(/,/g, "")}
     }
 `
 }

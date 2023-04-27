@@ -26,7 +26,7 @@ export default function () {
             bst_operation: ''
         }
 
-        axios.post("http://localhost:6060/api/project", data)
+        axios.post("https://interactive-bst-backend-production.up.railway.app/api/project", data)
             .then((result) => {
                 console.log('Success:', result.data.data.id)
                 const id = result.data.data.id
@@ -52,7 +52,7 @@ export default function () {
     }
 
     React.useEffect(() => {
-        fetch(`http://localhost:6060/api/project/${idUser}`).then(
+        fetch(`https://interactive-bst-backend-production.up.railway.app/api/project/${idUser}`).then(
             (response) => response.json()).then(
             (data) => {
                 setProject(data.data)

@@ -10,6 +10,7 @@ import GenerateSourceCode from "./GenerateSourceCode"
 import generateSourceCodeCpp from "../../data/generate/GenerateSourceCodeCpp"
 import generateSourceCodeJava from "../../data/generate/GenerateSourceCodeJava"
 import generateSourceCodeC from "../../data/generate/GenerateSourceCodeC"
+import generateSourceCodeCSharp from "../../data/generate/GenerateSourceCodeCSharp"
 import Swal from "sweetalert2"
 
 const bst = new BinarySearchTree()
@@ -27,6 +28,7 @@ export default function EditorPageInt() {
     const [logList, setLogList] = React.useState([])
     const [generate, setGenerate] = useState(null)
     const [language, setLanguage] = useState(null)
+    const [explain, setExplain] = useState([])
 
     const [showModal, setShowModal] = React.useState("hidden")
     let i = 0
@@ -35,7 +37,7 @@ export default function EditorPageInt() {
         if (root.length > 0) return
 
         bst.clearExplain()
-        axios.get(`http://localhost:6060/api/project/id/${pathname}`, {}).then(
+        axios.get(`https://interactive-bst-backend-production.up.railway.app/api/project/id/${pathname}`, {}).then(
             (data) => {
 
                 if (root.length > 0 || i > 0) return
@@ -95,106 +97,113 @@ export default function EditorPageInt() {
     }
 
     function Insert() {
-        
         bst.clearExplain()
         const data = parseInt(refInsert.current.value)
         if (isNaN(data)) {
-            alert("Input Invalid")
+            showAlertError("Input tidak valid!")
+            refInsert.current.value = ""
             return
         }
-        showAlert("Success","Success Insert Data")
+        showAlert("Success", "Berhasil Insert Data")
         bst.insert(data)
         setRoot((prev) => ({...prev, ...bst.root}))
         updateLog()
+        setExplain(bst.explain)
         refInsert.current.value = ""
 
     }
 
     function Delete() {
-        
         bst.clearExplain()
         const data = parseInt(refDelete.current.value)
         if (isNaN(data)) {
-            alert("Input Invalid")
+            showAlertError("Input tidak valid!")
+            refInsert.current.value = ""
             return
         }
-        showAlert("Success","Success Delete Data")
+
         bst.delete(data)
+        if (bst.deleteFail)
+            showAlertError("Data tidak ditemukan!")
+        else
+            showAlert("Success", "Berhasil Delete Data")
+
         setRoot((prev) => ({...prev, ...bst.root}))
         updateLog()
+        setExplain(bst.explain)
         refDelete.current.value = ""
     }
 
     function Search() {
-        
         bst.clearExplain()
         const data = parseInt(refSearch.current.value)
         if (isNaN(data)) {
-            alert("Input Invalid")
+            showAlertError("Input tidak valid!")
             return
         }
-
         const finalData = bst.search(bst.getRootNode(), data)
         if (finalData !== "") {
-            showAlert("Success",`Data is found ${finalData}`)
+            showAlert("Success", `Data ${finalData} ditemukan`)
             updateLog()
         } else {
-            Swal.fire({
-                icon: 'error',
-                title: 'Oops...',
-                text: 'Data is not found!',
-            })
+            showAlertError('Data tidak ditemukan!')
         }
+
+        setExplain(bst.explain)
 
         refSearch.current.value = ""
     }
 
     function preOrderAwake() {
         bst.clearList()
-        
+
         bst.preorder(bst.getRootNode())
         bst.getListPreOrder()
     }
 
     function postOrderAwake() {
         bst.clearList()
-        
+
         bst.postorder(bst.getRootNode())
         bst.getListPostOrder()
     }
 
     function inOrderAwake() {
         bst.clearList()
-        
+
         bst.inorder(bst.getRootNode())
         bst.getListInOrder()
     }
 
     function preOrder() {
         bst.clearList()
-        
+        bst.clearExplain()
+
         bst.preorder(bst.getRootNode())
         bst.getListPreOrder()
         showAlert("Preorder", bst.getListPreOrder())
         updateLog()
+        setExplain(bst.explain)
     }
 
     function postOrder() {
         bst.clearList()
-        
+        bst.clearExplain()
         bst.postorder(bst.getRootNode())
         bst.getListPostOrder()
         showAlert("Postorder", bst.getListPostOrder())
         updateLog()
+        setExplain(bst.explain)
     }
 
     function inOrder() {
         bst.clearList()
-        
+        bst.clearExplain()
         bst.inorder(bst.getRootNode())
         bst.getListInOrder()
         showAlert("Inorder", bst.getListInOrder())
         updateLog()
+        setExplain(bst.explain)
     }
 
     function updateLog() {
@@ -202,7 +211,7 @@ export default function EditorPageInt() {
         setLogList(bst.getLogList())
         const final = bst.getLog()
         const update = {bst_operation: final}
-        axios.put(`http://localhost:6060/api/project/id/${pathname}`, update)
+        axios.put(`https://interactive-bst-backend-production.up.railway.app/api/project/id/${pathname}`, update)
             .then(
                 response => console.log(response.data.status)
             )
@@ -243,6 +252,14 @@ export default function EditorPageInt() {
             text: message,
             icon: "success",
             confirmButtonText: "OK",
+        })
+    }
+
+    function showAlertError(message) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: message,
         })
     }
 
@@ -359,7 +376,7 @@ export default function EditorPageInt() {
                 </div>
                 <button
                     className="bg-yellowPrimary hover:bg-dark text-white mt-14 font-bold py-2 px-4 rounded mt-28 fixed top-1/3 ml-24"
-                    onClick={Search}>
+                    onClick={Search.bind(this)}>
                     GO
                 </button>
             </div>
@@ -411,7 +428,7 @@ export default function EditorPageInt() {
                         {/*Export C Start*/}
                         <li className={"border-b-2 border-white"}>
                             <a
-                                onClick={exportCode.bind(this, generateSourceCodeC(logList), "c")}
+                                onClick={exportCode.bind(this, generateSourceCodeC(logList), "C")}
                                 className="flex items-center p-2 text-base font-normal text-gray-900 dark:text-white hover:bg-dark">
                                 <span
                                     className="flex-1 ml-3 whitespace-nowrap text-white text-bold">C</span></a>
@@ -421,17 +438,27 @@ export default function EditorPageInt() {
                         {/*Export C++ Start*/}
                         <li className={"border-b-2 border-white"}>
                             <a
-                                onClick={exportCode.bind(this, generateSourceCodeCpp(logList), "c++")}
+                                onClick={exportCode.bind(this, generateSourceCodeCpp(logList), "C++")}
                                 className="flex items-center p-2 text-base font-normal text-gray-900 dark:text-white hover:bg-dark">
                                 <span
                                     className="flex-1 ml-3 whitespace-nowrap text-white text-bold">C++</span></a>
                         </li>
                         {/*Export C++ End*/}
 
+                        {/*Export C# Start*/}
+                        <li className={"border-b-2 border-white"}>
+                            <a
+                                onClick={exportCode.bind(this, generateSourceCodeCSharp(logList), "C#")}
+                                className="flex items-center p-2 text-base font-normal text-gray-900 dark:text-white hover:bg-dark">
+                                <span
+                                    className="flex-1 ml-3 whitespace-nowrap text-white text-bold">C#</span></a>
+                        </li>
+                        {/*Export C# End*/}
+
                         {/*Export Java Start*/}
                         <li className={"border-b-2 border-white"}>
                             <a
-                                onClick={exportCode.bind(this, generateSourceCodeJava(logList), "java")}
+                                onClick={exportCode.bind(this, generateSourceCodeJava(logList), "Java")}
                                 className="flex items-center p-2 text-base font-normal text-gray-900 dark:text-white hover:bg-dark">
                                 <span className="flex-1 ml-3 whitespace-nowrap text-white text-bold">Java</span></a>
                         </li>
@@ -440,7 +467,7 @@ export default function EditorPageInt() {
                         {/*Export JS Start*/}
                         <li className={"border-b-8 border-white"}>
                             <a
-                                onClick={exportCode.bind(this, generateJS(logList), "javascript")}
+                                onClick={exportCode.bind(this, generateJS(logList), "Javascript")}
                                 className="flex items-center p-2 text-base font-normal text-gray-900 dark:text-white hover:bg-dark"
                                 data-modal-toggle="small-modal">
 
@@ -452,8 +479,6 @@ export default function EditorPageInt() {
                 </div>
             </aside>
             {/*Export Child End*/}
-
-           {/* <h3 className={"ml-40 mr-40 mt-72 inline-block fixed top-1/2 font-bold text-lg w-full"}>{print.map(data => " " + data)}</h3>*/}
 
             {/*Modal Generate Source Code Start*/}
             <div id="defaultModal" tabIndex="-1" aria-hidden="true"
@@ -495,9 +520,9 @@ export default function EditorPageInt() {
             {/*Render*/}
 
             {/*List Start*/}
-            <ul className="list-disc w-72 h-96 p-2 fixed top-0 right-1 overflow-scroll mt-32">
+            <ul className="list-disc w-80 h-96 p-2 fixed top-0 right-1 overflow-scroll mt-32">
                 <h2 className={"font-bold"}>Explain</h2>
-                {bst.getExplain().map((explain) =>
+                {explain.map((explain) =>
                     <li>{explain}</li>
                 )}
 

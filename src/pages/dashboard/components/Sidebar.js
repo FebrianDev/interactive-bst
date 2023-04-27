@@ -1,6 +1,7 @@
 import {Link, useLocation, useNavigate} from "react-router-dom";
 import {Icon} from "@iconify/react/dist/iconify";
 import React from "react";
+import Swal from "sweetalert2";
 
 export default function Sidebar() {
 
@@ -19,8 +20,26 @@ export default function Sidebar() {
     }, [])
 
     function logout() {
-        localStorage.removeItem("ID")
-        navigate("/")
+
+        Swal.fire({
+            title: 'Are you sure logout?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                Swal.fire(
+                    'Success',
+                    'You have been success logout.',
+                    'success'
+                )
+
+                localStorage.removeItem("ID")
+                navigate("/login")
+            }
+        })
     }
 
     return (<>

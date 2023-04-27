@@ -31,7 +31,7 @@ export default function Login() {
             password: inputPassword
         }
 
-        axios.post("http://localhost:6060/api/login",
+        axios.post("https://interactive-bst-backend-production.up.railway.app/api/login",
             data
         ).then(data => {
             console.log(data)

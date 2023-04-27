@@ -11,6 +11,7 @@ export default class BinarySearchTree {
         this.listPostOrder = []
         this.listInOrder = []
         this.explain = []
+        this.deleteFail = null
     }
 
     getLogList() {
@@ -39,15 +40,15 @@ export default class BinarySearchTree {
         if (node === null) {
             this.root = new Node(data)
             ths.newLog.logInsert(data)
-            ths.explain.push(`${data} as root`)
+            ths.explain.push(`- ${data} sebagai root`)
             return
         } else {
             function searchTree(nodes) {
-                ths.explain.push(`Comparing ${data} with ${nodes.data}`)
+                ths.explain.push(`- Bandingkan ${data} dengan ${nodes.data}`)
                 if (data < nodes.data) {
-                    ths.explain.push(`${data} is smaller than ${nodes.data}, so go left`)
+                    ths.explain.push(`- Karena ${data} lebih kecil daripada ${nodes.data}, maka pergi ke simpul sebelah kiri`)
                     if (nodes.left === null) {
-                        ths.explain.push(`Location found! Inserting ${data}`)
+                        ths.explain.push(`- Lokasi ditemukan! Tambahkan ${data} ke dalam simpul`)
                         nodes.left = new Node(data)
                         ths.newLog.logInsert(data)
                         return
@@ -55,9 +56,9 @@ export default class BinarySearchTree {
                         return searchTree(nodes.left)
                     }
                 } else if (data > nodes.data || data === nodes.data) {
-                    ths.explain.push(`${data} is larger than ${nodes.data}, so go right`)
+                    ths.explain.push(`- Karena ${data} lebih besar daripada ${nodes.data}, maka pergi ke simpul sebelah kanan`)
                     if (nodes.right === null) {
-                        ths.explain.push(`Location found! Inserting ${data}`)
+                        ths.explain.push(`- Lokasi ditemukan! Tambahkan ${data} ke dalam simpul`)
                         nodes.right = new Node(data)
                         ths.newLog.logInsert(data)
                         return
@@ -83,31 +84,31 @@ export default class BinarySearchTree {
 
     // search for a node with given data
     search(node, data) {
+        var ths = this
         // if trees is empty return null
         if (node === null) {
-            console.log("Not Found")
-            this.explain.push(`Value ${data} is not found in the BST`)
+            ths.explain.push(`- Data ${data} tidak ditemukan!`)
             return ""
         }
 
-        // if data is less than node's data
+            // if data is less than node's data
         // move left
         else if (data < node.data) {
-            this.explain.push(`Comparing ${data} with ${node.data}`)
-            this.explain.push(`${data} is less than ${node.data}, so go left`)
+            ths.explain.push(`- Bandingkan ${data} dengan ${node.data}`)
+            ths.explain.push(`- Karena ${data} lebih kecil daripada ${node.data}, maka pergi ke simpul sebelah kiri`)
             return this.search(node.left, data)
         }
             // if data is less than node's data
         // move left
         else if (data > node.data) {
-            this.explain.push(`Comparing ${data} with ${node.data}`)
-            this.explain.push(`${data} is greater than ${node.data}, so go right`)
+            ths.explain.push(`- Bandingkan ${data} dengan ${node.data}`)
+            ths.explain.push(`- Karena ${data} lebih besar daripada ${node.data}, maka pergi ke simpul sebelah kanan`)
             return this.search(node.right, data)
         }
             // if data is equal to the node data
         // return node
         else {
-            this.explain.push(`Found value ${data}`)
+            ths.explain.push(`- Data ${data} berhasil ditemukan`)
             this.newLog.logSearch(node.data)
             return node.data
         }
@@ -118,25 +119,30 @@ export default class BinarySearchTree {
     }
 
     delete(data) {
-        this.explain.push(`Search ${data}`)
+        this.explain.push(`- Cari data ${data}`)
         this.root = this.removeData(this.root, data)
     }
 
     removeData(nodes, data) {
-        this.explain.push(`Comparing ${data} with ${nodes.data}`)
         if (nodes === null) {
-            this.explain.push(`Can't find ${data}`)
+            this.explain.push(`- Data ${data} tidak dapat ditemukan!`)
+            this.deleteFail = true
             return null
-        } else if (data < nodes.data) {
-            this.explain.push(`${data} is smaller than ${nodes.data}, so go left`)
+        }
+
+        this.explain.push(`- Bandingkan ${data} dengan ${nodes.data}`)
+
+        if (data < nodes.data) {
+            this.explain.push(`- Karena ${data} lebih kecil daripada ${nodes.data}, maka pergi ke simpul sebelah kiri`)
             nodes.left = this.removeData(nodes.left, data)
             return nodes
         } else if (data > nodes.data) {
-            this.explain.push(`${data} is larger than ${nodes.data}, so go right`)
+            this.explain.push(`- Karena ${data} lebih besar daripada ${nodes.data}, maka pergi ke simpul sebelah kanan`)
             nodes.right = this.removeData(nodes.right, data)
             return nodes
         } else {
-            this.explain.push(`Location found! Remove ${data}`)
+            this.deleteFail = false
+            this.explain.push(`- Lokasi ditemukan! Hapus data ${data}`)
             this.newLog.logDelete(data)
             if (nodes.left === null && nodes.right === null) {
                 nodes = null
@@ -180,10 +186,16 @@ export default class BinarySearchTree {
 
     inorder_recursive(node) {
         if (node !== null) {
+            this.explain.push(`- Jika data ${node.data} tidak null, maka kunjungi sub pohon sebelah kiri\n`)
             this.inorder_recursive(node.left)
+            this.explain.push(`- Dapatkan data ${node.data}\n`)
             console.log(node.data)
             this.listInOrder.push(node.data)
+            this.explain.push(`Hasil ${this.listInOrder}\n\n`)
+            this.explain.push(`- Jika ${node.data} tidak null, maka kunjungi sub pohon sebelah kanan\n`)
             this.inorder_recursive(node.right)
+        } else {
+            this.explain.push(`- Karena simpul sama dengan null, maka berhenti melakukan kunjungan pada sub pohon tujuan\n`)
         }
     }
 
@@ -196,8 +208,14 @@ export default class BinarySearchTree {
         if (node !== null) {
             console.log(node.data)
             this.listPreOrder.push(node.data)
+            this.explain.push(`- Dapatkan data ${node.data}\n`)
+            this.explain.push(`Hasil ${this.listPreOrder}\n\n`)
+            this.explain.push(`- Jika data ${node.data} tidak null, maka kunjungi sub pohon sebelah kiri\n`)
             this.preorder_recursive(node.left)
+            this.explain.push(`- Jika ${node.data} tidak null, maka kunjungi sub pohon sebelah kanan\n`)
             this.preorder_recursive(node.right)
+        } else {
+            this.explain.push(`- Karena simpul sama dengan null, maka berhenti melakukan kunjungan pada sub pohon tujuan\n`)
         }
     }
 
@@ -208,10 +226,16 @@ export default class BinarySearchTree {
 
     postorder_recursive(node) {
         if (node !== null) {
+            this.explain.push(`- Jika data ${node.data} tidak null, maka kunjungi sub pohon sebelah kiri\n`)
             this.postorder_recursive(node.left)
+            this.explain.push(`- Jika ${node.data} tidak null, maka kunjungi sub pohon sebelah kanan\n`)
             this.postorder_recursive(node.right)
+            this.explain.push(`- Dapatkan data ${node.data}\n`)
             console.log(node.data)
             this.listPostOrder.push(node.data)
+            this.explain.push(`Hasil ${this.listPostOrder}\n\n`)
+        } else {
+            this.explain.push(`- Karena simpul sama dengan null, maka berhenti melakukan kunjungan pada sub pohon tujuan\n`)
         }
     }
 

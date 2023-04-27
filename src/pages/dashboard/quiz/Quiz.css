@@ -1,0 +1,7 @@
+.quiz{
+    height: 100vh;
+    overflow: scroll;
+    padding-right: 64px;
+    padding-bottom: 164px;
+    margin-bottom: 128px;
+}

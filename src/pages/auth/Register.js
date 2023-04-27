@@ -2,7 +2,7 @@ import {useRef, useState} from "react"
 import {useNavigate} from "react-router-dom"
 import axios from "axios"
 import {emailValidation, nameValidation, passwordValidation} from "../../helper/validation/Validation"
-
+import logo from "../../assets/logo.png"
 export default function Register() {
 
     const name = useRef(null)
@@ -37,7 +37,7 @@ export default function Register() {
             password: inputPassword
         }
 
-        axios.post("http://localhost:6060/api/register",
+        axios.post("https://interactive-bst-backend-production.up.railway.app/api/register",
             data,
         ).then((data) => {
             console.log('Success:', data)
@@ -54,6 +54,7 @@ export default function Register() {
     return (
         <>
             <section className="bg-gray-50 dark:bg-gray-900">
+                <img src={logo} className={"mt-8 ml-8 absolute"} width={64} height={64}/>
                 <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
                     <div
                         className="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">

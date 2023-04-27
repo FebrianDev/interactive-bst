@@ -1,26 +1,39 @@
 import React, {useState} from "react"
 import Sidebar from "../components/Sidebar"
-import Learn from "./Learn.css"
 import Section1 from "./contents/Section1";
 import Section2 from "./contents/Section2";
 import Section3 from "./contents/Section3";
 import Section4 from "./contents/Section4";
+import Section5 from "./contents/Section5";
+import Section6 from "./contents/Section6";
+import Section7 from "./contents/Section7";
+import "./Learn.css"
 
 export default function () {
 
     const listData = [{
-        title: <p>Section 1 -- Introduction To Binary Trees</p>,
+        title: <p>Materi 1 -- Binary Search Tree</p>,
         content: <Section1/>
     }, {
-        title: <p>Section 2 -- Binary Tree Problems</p>,
+        title: <p>Materi 2 -- Implementasi Binary Search Tree</p>,
         content: <Section2/>
     }, {
-        title: <p>Section 3 -- C/C++ Solutions</p>,
+        title: <p>Materi 3 -- Implementasi Binary Search Tree dalam Bahasa C</p>,
         content: <Section3/>
     }, {
-        title: <p>Section 4 -- Java Binary Trees and Solutions</p>,
+        title: <p>Materi 4 -- Implementasi Binary Search Tree dalam Bahasa C++</p>,
         content: <Section4/>
-    }]
+    }, {
+        title: <p>Materi 5 -- Implementasi Binary Search Tree dalam Bahasa C#</p>,
+        content: <Section5/>
+    }, {
+        title: <p>Materi 6 -- Implementasi Binary Search Tree dalam Bahasa Java</p>,
+        content: <Section6/>
+    },{
+            title: <p>Materi 7 -- Implementasi Binary Search Tree dalam Bahasa Javascript</p>,
+            content: <Section7/>
+        }
+    ]
 
     const [showSidebar, setShowSidebar] = useState(false)
 
