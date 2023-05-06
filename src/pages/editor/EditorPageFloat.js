@@ -1,15 +1,16 @@
-import BinarySearchTree from "../../data/BinarySearchTree";
-import {useLocation} from "react-router-dom";
-import React, {useRef, useState} from "react";
-import axios from "axios";
-import Swal from "sweetalert2";
-import {Icon} from "@iconify/react/dist/iconify";
-import generateSourceCodeC from "../../data/generate/GenerateSourceCodeC";
-import generateSourceCodeCpp from "../../data/generate/GenerateSourceCodeCpp";
-import generateSourceCodeJava from "../../data/generate/GenerateSourceCodeJava";
-import generateJS from "../../data/generate/GenerateSourceCodeJS";
-import GenerateSourceCode from "./GenerateSourceCode";
-import Tree from "./Render";
+import BinarySearchTree from "../../data/BinarySearchTree"
+import {useLocation} from "react-router-dom"
+import React, {useRef, useState} from "react"
+import axios from "axios"
+import Swal from "sweetalert2"
+import {Icon} from "@iconify/react/dist/iconify"
+import generateSourceCodeC from "../../data/generate/GenerateSourceCodeC"
+import generateSourceCodeCpp from "../../data/generate/GenerateSourceCodeCpp"
+import generateSourceCodeJava from "../../data/generate/GenerateSourceCodeJava"
+import generateJS from "../../data/generate/GenerateSourceCodeJS"
+import GenerateSourceCode from "./GenerateSourceCode"
+import Tree from "./Render"
+import {URL} from "../../URL"
 
 const bst = new BinarySearchTree()
 
@@ -32,7 +33,7 @@ export default function EditorPageFloat() {
         if (root.length > 0 || i > 0) return
 
         bst.clearExplain()
-        axios.get(`https://interactive-bst-backend-production.up.railway.app/api/project/id/${pathname}`, {}).then(
+        axios.get(`${URL}/api/project/id/${pathname}`, {}).then(
             (data) => {
                 if (root.length > 0 || i > 0) return
                 const operation = data.data.data.bst_operation
@@ -52,10 +53,10 @@ export default function EditorPageFloat() {
                         const value = data.split(':')[1]
 
                         if (key === "insert") {
-                            insert(value);
+                            insert(value)
                             console.log("insert")
                         } else if (key === "delete") {
-                            deleteAwake(value);
+                            deleteAwake(value)
                         } else if (key === "search") searchAwake(value)
                     }
 

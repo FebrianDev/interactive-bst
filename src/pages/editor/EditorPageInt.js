@@ -12,6 +12,7 @@ import generateSourceCodeJava from "../../data/generate/GenerateSourceCodeJava"
 import generateSourceCodeC from "../../data/generate/GenerateSourceCodeC"
 import generateSourceCodeCSharp from "../../data/generate/GenerateSourceCodeCSharp"
 import Swal from "sweetalert2"
+import {URL} from "../../URL"
 
 const bst = new BinarySearchTree()
 
@@ -37,7 +38,7 @@ export default function EditorPageInt() {
         if (root.length > 0) return
 
         bst.clearExplain()
-        axios.get(`https://interactive-bst-backend-production.up.railway.app/api/project/id/${pathname}`, {}).then(
+        axios.get(`${URL}/api/project/id/${pathname}`, {}).then(
             (data) => {
 
                 if (root.length > 0 || i > 0) return
@@ -62,10 +63,10 @@ export default function EditorPageInt() {
                         const value = data.split(':')[1]
 
                         if (key === "insert") {
-                            insert(value);
+                            insert(value)
                             console.log("insert")
                         } else if (key === "delete") {
-                            deleteAwake(value);
+                            deleteAwake(value)
                         } else if (key === "search") searchAwake(value)
                     }
 
@@ -211,7 +212,7 @@ export default function EditorPageInt() {
         setLogList(bst.getLogList())
         const final = bst.getLog()
         const update = {bst_operation: final}
-        axios.put(`https://interactive-bst-backend-production.up.railway.app/api/project/id/${pathname}`, update)
+        axios.put(`${URL}/api/project/id/${pathname}`, update)
             .then(
                 response => console.log(response.data.status)
             )

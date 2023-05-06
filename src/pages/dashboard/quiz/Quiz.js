@@ -1,8 +1,8 @@
 import React, {useState} from "react";
 import Sidebar from "../components/Sidebar";
 import "./Quiz.css"
-import Countdown from "react-countdown";
 import axios from "axios";
+import {URL} from "../../../URL";
 
 export default function () {
 
@@ -168,14 +168,19 @@ export default function () {
     },]
 
     const [score, setScore] = useState(0)
+    const [listQuiz, setListQuiz] = useState([])
 
     React.useEffect(() => {
-        //Random Question
-        Questions.sort(() => Math.random() - 0.5)
-        //Random Answer
-        Questions.map((data) => data.a.sort(() => Math.random() - 0.5))
 
-        console.log(Questions)
+        axios.get(`${URL}/api/list-quiz`)
+            .then((result) => {
+                console.log('Success2:', result.data.data)
+                setListQuiz(result.data.data)
+            })
+            .catch((error) => {
+                console.error('Error:', error)
+            })
+
 
         getHistory()
 
@@ -187,15 +192,16 @@ export default function () {
 
     function getData() {
         let myScore = 0;
-        for (let q = 0; q < Questions.length; q++) {
+        for (let q = 0; q < listQuiz.length; q++) {
             const ele = document.getElementsByName(`${q}`)
+            console.log(ele[q].value)
+            console.log(ele[q].checked)
 
             for (let i = 0; i < ele.length; i++) {
-                if (ele[i].checked === true && Questions[q].a[i].isCorrect === true) {
+                if(ele[i].value === listQuiz[q].answer && ele[i].checked){
                     myScore += 1
                     setScore(myScore)
-                    console.log(ele[i].value)
-                    console.log(ele[i].checked)
+
                     break
                 } else console.log("Not OKE")
             }
@@ -207,7 +213,7 @@ export default function () {
             score: `${myScore}`,
         }
 
-        axios.post("https://interactive-bst-backend-production.up.railway.app/api/quiz",
+        axios.post(`${URL}/api/quiz`,
             data,
         ).then((data) => {
 
@@ -258,7 +264,7 @@ export default function () {
     const [history, setHistory] = useState([])
 
     function getHistory() {
-        axios.get("https://interactive-bst-backend-production.up.railway.app/api/quiz/" + idUser,
+        axios.get(`${URL}/api/quiz/` + idUser,
         ).then((data) => {
             console.log('Success:', data.data.data)
             setHistory(data.data.data)
@@ -315,40 +321,34 @@ export default function () {
                 </div>
             </div>
 
-       {/*     {(quiz) ? <Countdown
-                date={Date.now() + 10000}
-                renderer={renderer}
-            /> : ""}
-*/}
-            {/* {Questions.map((question, key) =>*/}
             <>
                 <div className={`quiz ${(quiz) ? "" : "hidden"}`}>
-                    {(quiz) ? Questions.map((question, key) =>
+                    {(quiz) ? listQuiz.map((question, key) =>
                         <>
                             <div className="question-container" id="question">
-                                {key + 1}. {question.q}
+                                {key + 1}. {question.question}
                             </div>
                             <div className="option-container">
-                                <input type="radio" id={question.a[0].id}
-                                       name={question.id}
-                                       value={question.a[0].text} className={"w-8"}/>
+                                <input type="radio" id={question.a + key}
+                                       name={key}
+                                       value={question.a} className={"w-8"}/>
                                 <label
-                                    for={question.a[0].id}> {question.a[0].text}</label><br/>
-                                <input type="radio" id={question.a[1].id}
-                                       name={question.id}
-                                       value={question.a[1].text} className={"w-8"}/>
+                                    for={question.a + key}> {question.a}</label><br/>
+                                <input type="radio" id={question.b + key}
+                                       name={key}
+                                       value={question.b} className={"w-8"}/>
                                 <label
-                                    htmlFor={question.a[1].id}>{question.a[1].text}</label><br/>
-                                <input type="radio" id={question.a[2].id}
-                                       name={question.id}
-                                       value={question.a[2].text} className={"w-8"}/>
+                                    htmlFor={question.b + key}>{question.b}</label><br/>
+                                <input type="radio" id={question.c + key}
+                                       name={key}
+                                       value={question.c} className={"w-8"}/>
                                 <label
-                                    htmlFor={question.a[2].id}>{question.a[2].text}</label><br/>
-                                <input type="radio" id={question.a[3].id}
-                                       name={question.id}
-                                       value={question.a[3].text} className={"w-8"}/>
+                                    htmlFor={question.c + key}>{question.c}</label><br/>
+                                <input type="radio" id={question.d + key}
+                                       name={key}
+                                       value={question.d} className={"w-8"}/>
                                 <label
-                                    htmlFor={question.a[3].id}>{question.a[3].text}</label><br/>
+                                    htmlFor={question.d + key}>{question.d}</label><br/>
                             </div>
                             <br/>
                         </>

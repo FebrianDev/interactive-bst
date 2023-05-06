@@ -1,7 +1,8 @@
 import {useRef, useState} from "react"
 import {useNavigate} from "react-router-dom"
 import axios from "axios"
-import {emailValidation, passwordValidation} from "../../helper/validation/Validation";
+import {emailValidation, passwordValidation} from "../../helper/validation/Validation"
+import {URL} from "../../URL"
 
 export default function Login() {
 
@@ -31,7 +32,7 @@ export default function Login() {
             password: inputPassword
         }
 
-        axios.post("https://interactive-bst-backend-production.up.railway.app/api/login",
+        axios.post(`${URL}/api/login`,
             data
         ).then(data => {
             console.log(data)

@@ -3,6 +3,8 @@ import {useNavigate} from "react-router-dom"
 import axios from "axios"
 import {emailValidation, nameValidation, passwordValidation} from "../../helper/validation/Validation"
 import logo from "../../assets/logo.png"
+import {URL} from "../../URL"
+
 export default function Register() {
 
     const name = useRef(null)
@@ -37,7 +39,7 @@ export default function Register() {
             password: inputPassword
         }
 
-        axios.post("https://interactive-bst-backend-production.up.railway.app/api/register",
+        axios.post(`${URL}/api/register`,
             data,
         ).then((data) => {
             console.log('Success:', data)

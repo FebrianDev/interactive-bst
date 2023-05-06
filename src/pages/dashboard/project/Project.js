@@ -1,7 +1,8 @@
 import React, {useRef} from "react"
-import {useNavigate} from "react-router-dom";
-import axios from "axios";
-import Sidebar from "../components/Sidebar";
+import {useNavigate} from "react-router-dom"
+import axios from "axios"
+import Sidebar from "../components/Sidebar"
+import {URL} from "../../../URL"
 
 export default function () {
 
@@ -26,7 +27,7 @@ export default function () {
             bst_operation: ''
         }
 
-        axios.post("https://interactive-bst-backend-production.up.railway.app/api/project", data)
+        axios.post(`${URL}/api/project`, data)
             .then((result) => {
                 console.log('Success:', result.data.data.id)
                 const id = result.data.data.id
@@ -52,7 +53,7 @@ export default function () {
     }
 
     React.useEffect(() => {
-        fetch(`https://interactive-bst-backend-production.up.railway.app/api/project/${idUser}`).then(
+        fetch(`${URL}/api/project/${idUser}`).then(
             (response) => response.json()).then(
             (data) => {
                 setProject(data.data)

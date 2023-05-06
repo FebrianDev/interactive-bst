@@ -1,7 +1,8 @@
-import React, {useState} from "react";
-import Sidebar from "../components/Sidebar";
-import {EyeIcon, EyeSlashIcon} from "@heroicons/react/24/solid";
-import axios from "axios";
+import React, {useState} from "react"
+import Sidebar from "../components/Sidebar"
+import {EyeIcon, EyeSlashIcon} from "@heroicons/react/24/solid"
+import axios from "axios"
+import {URL} from "../../../URL"
 
 export default function () {
 
@@ -11,7 +12,7 @@ export default function () {
 
     const [errorState, setErrorState] = useState("")
 
-    axios.get("https://interactive-bst-backend-production.up.railway.app/api/user/1"
+    axios.get(`${URL}/api/user/1`
     ).then(data => {
         const user = data.data.data
         setName(user.name)
@@ -22,14 +23,14 @@ export default function () {
     const [passValue, setPassValue] = useState({
         password: "",
         showPassword: false,
-    });
+    })
 
     const handlePasswordChange = (prop) => (event) => {
-        setPassValue({...passValue, [prop]: event.target.value});
+        setPassValue({...passValue, [prop]: event.target.value})
     }
 
     const handleClickShowPassword = () =>
-        setPassValue({...passValue, showPassword: !passValue.showPassword});
+        setPassValue({...passValue, showPassword: !passValue.showPassword})
 
     return (
         <>
