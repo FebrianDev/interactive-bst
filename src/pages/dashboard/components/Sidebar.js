@@ -2,6 +2,7 @@ import {Link, useLocation, useNavigate} from "react-router-dom";
 import {Icon} from "@iconify/react/dist/iconify";
 import React from "react";
 import Swal from "sweetalert2";
+import logo from "../../../assets/logo.png";
 
 export default function Sidebar() {
 
@@ -42,7 +43,12 @@ export default function Sidebar() {
         })
     }
 
+    function backToHome(){
+        navigate("/")
+    }
+
     return (<>
+        <img src={logo} className={"mt-8 ml-24 absolute"} width={64} height={64} onClick={backToHome}/>
         <aside className="w-1/4 fixed top-1/4" aria-label="Sidebar">
             <div className="bg-white">
                 <ul className="space-y-8">

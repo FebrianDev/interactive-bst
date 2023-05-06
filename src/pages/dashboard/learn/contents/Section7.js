@@ -1,7 +1,7 @@
 import Editor from "@monaco-editor/react";
 import React from "react";
 
-export default function (){
+export default function () {
     const code = "\n" +
         "    class Node {\n" +
         "        constructor(data) {\n" +
@@ -202,6 +202,13 @@ export default function (){
             <p>Fungsi postorder digunakan untuk melakukan traversal (penelusuran) pada dengan mengunjungi node-node
                 dalam urutan kiri-kanan-root. Fungsi ini akan mencetak nilai dari setiap node yang dikunjungi dalam
                 urutan tersebut.</p><br/><br/>
+            <a href={"https://www.geeksforgeeks.org/binary-search-tree-data-structure/"}>https://www.geeksforgeeks.org/binary-search-tree-data-structure/</a><br/>
+            <a href={"chat.openai.com"}>chat.openai.com</a><br/>
+            <a href={"https://informatika.unsyiah.ac.id/irvanizam/teaching/SD/bst.pdf"}>https://informatika.unsyiah.ac.id/irvanizam/teaching/SD/bst.pdf</a><br/>
+            <a href={"https://www.programiz.com/dsa/binary-search-tree"}>https://www.programiz.com/dsa/binary-search-tree</a><br/>
+            <a href={"https://www.javatpoint.com/binary-search-tree"}>https://www.javatpoint.com/binary-search-tree</a><br/>
+            <a href={"https://www.tutorialspoint.com/data_structures_algorithms/binary_search_tree.htm"}>https://www.tutorialspoint.com/data_structures_algorithms/binary_search_tree.htm</a><br/><br/><br/>
+
         </>
     )
 

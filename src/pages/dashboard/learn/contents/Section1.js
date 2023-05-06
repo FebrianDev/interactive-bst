@@ -45,7 +45,13 @@ export default function () {
                 mengunjungi node-node pada sub-pohon kanan. Postorder traversal mengunjungi node-node pada sub-pohon
                 kiri, kemudian mengunjungi node-node pada sub-pohon kanan, dan terakhir mengunjungi node saat ini.</p>
             <br/>
-            <a href={"http://cslibrary.stanford.edu/110/BinaryTrees.html"}>http://cslibrary.stanford.edu/110/BinaryTrees.html</a><br/><br/>
+            <a href={"https://www.geeksforgeeks.org/binary-search-tree-data-structure/"}>https://www.geeksforgeeks.org/binary-search-tree-data-structure/</a><br/>
+            <a href={"chat.openai.com"}>chat.openai.com</a><br/>
+            <a href={"https://informatika.unsyiah.ac.id/irvanizam/teaching/SD/bst.pdf"}>https://informatika.unsyiah.ac.id/irvanizam/teaching/SD/bst.pdf</a><br/>
+            <a href={"https://www.programiz.com/dsa/binary-search-tree"}>https://www.programiz.com/dsa/binary-search-tree</a><br/>
+            <a href={"https://www.javatpoint.com/binary-search-tree"}>https://www.javatpoint.com/binary-search-tree</a><br/>
+            <a href={"https://www.tutorialspoint.com/data_structures_algorithms/binary_search_tree.htm"}>https://www.tutorialspoint.com/data_structures_algorithms/binary_search_tree.htm</a><br/><br/><br/>
+
         </>
     )
 }

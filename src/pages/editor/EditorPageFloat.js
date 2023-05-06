@@ -1,5 +1,5 @@
 import BinarySearchTree from "../../data/BinarySearchTree"
-import {useLocation} from "react-router-dom"
+import {useLocation, useNavigate} from "react-router-dom"
 import React, {useRef, useState} from "react"
 import axios from "axios"
 import Swal from "sweetalert2"
@@ -18,6 +18,8 @@ export default function EditorPageFloat() {
     const location = useLocation()
     const pathname = location.pathname.split('/')[3]
 
+    const navigate = useNavigate()
+
     const refInsert = useRef(null)
     const refDelete = useRef(null)
     const refSearch = useRef(null)
@@ -35,6 +37,9 @@ export default function EditorPageFloat() {
         bst.clearExplain()
         axios.get(`${URL}/api/project/id/${pathname}`, {}).then(
             (data) => {
+
+                if(data.data.data.data_type !== "Float") backToDashboard()
+
                 if (root.length > 0 || i > 0) return
                 const operation = data.data.data.bst_operation
                 if (operation === "") return
@@ -242,8 +247,16 @@ export default function EditorPageFloat() {
         })
     }
 
+    function backToDashboard() {
+        navigate("/dashboard")
+    }
+
     return (
         <>
+
+            <Icon icon="typcn:arrow-back" className={"absolute text-primary ml-8 top-8"} width="64" height="64"
+                  onClick={backToDashboard}/>
+
             <aside className="w-36 fixed top-0 inline-block" aria-label="Sidebar">
                 <div className="bg-black">
                     <ul className="space-y-1"/>

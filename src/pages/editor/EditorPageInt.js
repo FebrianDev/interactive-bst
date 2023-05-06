@@ -3,7 +3,7 @@ import "./Editor.css"
 import Tree from "./Render"
 import {Icon} from "@iconify/react/dist/iconify"
 import generateJS from "../../data/generate/GenerateSourceCodeJS"
-import {useLocation} from "react-router-dom"
+import {useLocation, useNavigate} from "react-router-dom"
 import BinarySearchTree from "../../data/BinarySearchTree"
 import axios from 'axios'
 import GenerateSourceCode from "./GenerateSourceCode"
@@ -14,12 +14,15 @@ import generateSourceCodeCSharp from "../../data/generate/GenerateSourceCodeCSha
 import Swal from "sweetalert2"
 import {URL} from "../../URL"
 
+
 const bst = new BinarySearchTree()
 
 export default function EditorPageInt() {
 
     const location = useLocation()
     const pathname = location.pathname.split('/')[3]
+
+    const navigate = useNavigate()
 
     const refInsert = useRef(null)
     const refDelete = useRef(null)
@@ -40,6 +43,8 @@ export default function EditorPageInt() {
         bst.clearExplain()
         axios.get(`${URL}/api/project/id/${pathname}`, {}).then(
             (data) => {
+
+                if(data.data.data.data_type !== "Int") backToDashboard()
 
                 if (root.length > 0 || i > 0) return
 
@@ -264,14 +269,21 @@ export default function EditorPageInt() {
         })
     }
 
+    function backToDashboard() {
+        navigate("/dashboard")
+    }
+
     return (
         <>
+
+            <Icon icon="typcn:arrow-back" className={"absolute text-primary ml-8 top-8"} width="64" height="64"
+                  onClick={backToDashboard}/>
+
             <aside className="w-36 fixed top-0 inline-block" aria-label="Sidebar">
                 <div className="bg-black">
                     <ul className="space-y-1"/>
                 </div>
             </aside>
-
             <aside className="w-36 fixed top-1/3 inline-block" aria-label="Sidebar">
                 <div className="bg-primary">
                     <ul className="space-y-1">

@@ -2,6 +2,7 @@ import {useRef, useState} from "react"
 import {useNavigate} from "react-router-dom"
 import axios from "axios"
 import {emailValidation, passwordValidation} from "../../helper/validation/Validation"
+import logo from "../../assets/logo.png"
 import {URL} from "../../URL"
 
 export default function Login() {
@@ -51,9 +52,14 @@ export default function Login() {
             })
     }
 
+    function backToHome(){
+        navigate("/")
+    }
+
     return (
         <>
             <section className="bg-gray-50 dark:bg-gray-900">
+                <img src={logo} className={"mt-8 ml-8 absolute"} width={64} height={64} onClick={backToHome}/>
                 <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
                     <div
                         className="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">

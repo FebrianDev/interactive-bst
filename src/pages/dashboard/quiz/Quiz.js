@@ -194,12 +194,11 @@ export default function () {
         let myScore = 0;
         for (let q = 0; q < listQuiz.length; q++) {
             const ele = document.getElementsByName(`${q}`)
-            console.log(ele[q].value)
-            console.log(ele[q].checked)
 
             for (let i = 0; i < ele.length; i++) {
+                if(!ele[i].checked) continue
                 if(ele[i].value === listQuiz[q].answer && ele[i].checked){
-                    myScore += 1
+                    myScore += 10
                     setScore(myScore)
 
                     break
@@ -216,33 +215,12 @@ export default function () {
         axios.post(`${URL}/api/quiz`,
             data,
         ).then((data) => {
+           getHistory()
+            setQuiz(false)
 
         }).catch((error) => {
             console.error('Error:', error.message)
-
-
         })
-    }
-
-    console.log("Score " + score)
-
-    function setValuePrev(value) {
-        value -= 1
-        setQuestionState(value)
-    }
-
-    const [answer, setAnswer] = useState({})
-
-    function setValueNext(value) {
-        value += 1
-        setQuestionState(value)
-
-        const ele = document.getElementsByName(`${value - 1}`)
-        for (let i = 0; i < ele.length; i++) {
-            if (ele[i].checked) {
-                setAnswer({id: value - 1, a: Questions[value - 1].a[i].isCorrect})
-            }
-        }
     }
 
     const [quiz, setQuiz] = useState(false)
@@ -251,15 +229,6 @@ export default function () {
         setQuiz(true)
     }
 
-    const renderer = ({minutes, seconds, completed}) => {
-        if (completed) {
-            // Render a completed state
-            return "Completed"
-        } else {
-            // Render a countdown
-            return <span>{minutes}:{seconds}</span>;
-        }
-    }
 
     const [history, setHistory] = useState([])
 
@@ -357,50 +326,8 @@ export default function () {
                             onClick={getData}>Submit
                     </button>
                 </div>
-                {/* <div className="question-container" id="question">
-                        {questionState + 1}. {question.q}
-                    </div>
-                    <div className="option-container">
-                        <input type="radio" id={question.a[0].text}
-                               name={question.id}
-                               value={question.a[0].text} className={"w-8"}/>
-                        <label
-                            htmlFor={question.a[0].text}> {question.a[0].text}</label><br/>
-                        <input type="radio" id={question.a[1].text}
-                               name={question.id}
-                               value={question.a[1].text} className={"w-8"}/>
-                        <label
-                            htmlFor={question.a[1].text}>{question.a[1].text}</label><br/>
-                        <input type="radio" id={question.a[2].text}
-                               name={question.id}
-                               value={question.a[2].text} className={"w-8"}/>
-                        <label
-                            htmlFor={question.a[2].text}>{question.a[2].text}</label><br/>
-                        <input type="radio" id={question.a[3].text}
-                               name={question.id}
-                               value={question.a[3].text} className={"w-8"}/>
-                        <label
-                            htmlFor={question.a[3].text}>{question.a[3].text}</label><br/>
-
-                    </div>*/}
 
                 <br/>
-                {/*  <div className="navigation">
-                        {(questionState === 0) ? "" :
-                            <button className="prev bg-primary px-4 py-1 text-white rounded"
-                                    onClick={setValuePrev.bind(this, questionState)}>Prev
-                            </button>}
-
-                        {(questionState === Questions.length - 1) ? "" :
-                            <button className="next bg-primary px-4 py-1 text-white rounded ml-2"
-                                    onClick={setValueNext.bind(this, questionState)}>Next
-                            </button>}
-
-                        {(questionState !== Questions.length - 1) ? "" :
-                            <button className="bg-primary p-2 text-white font-bold rounded ml-2"
-                                    onClick={getData}>Submit</button>}
-
-                    </div>*/}
 
                 {/*Submit Quiz*/}
 
