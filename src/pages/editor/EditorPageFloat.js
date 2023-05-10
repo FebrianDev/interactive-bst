@@ -18,6 +18,8 @@ export default function EditorPageFloat() {
     const location = useLocation()
     const pathname = location.pathname.split('/')[3]
 
+    const [projectName, setProjectName] = useState()
+
     const navigate = useNavigate()
 
     const refInsert = useRef(null)
@@ -37,7 +39,7 @@ export default function EditorPageFloat() {
         bst.clearExplain()
         axios.get(`${URL}/api/project/id/${pathname}`, {}).then(
             (data) => {
-
+                setProjectName(data.data.data.name_project)
                 if(data.data.data.data_type !== "Float") backToDashboard()
 
                 if (root.length > 0 || i > 0) return
@@ -256,6 +258,8 @@ export default function EditorPageFloat() {
 
             <Icon icon="typcn:arrow-back" className={"absolute text-primary ml-8 top-8"} width="64" height="64"
                   onClick={backToDashboard}/>
+
+            <h1 className={"absolute text-primary ml-28 top-12 font-bold text-xl"}>{projectName}</h1>
 
             <aside className="w-36 fixed top-0 inline-block" aria-label="Sidebar">
                 <div className="bg-black">

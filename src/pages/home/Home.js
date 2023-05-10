@@ -21,8 +21,8 @@ export default function () {
 
                         <Link to={'/dashboard'}><span
                             className={'text-base font-semibold text-white bg-primary py-3 border border-primary px-8 rounded-full hover:shadow-lg hover:opacity-80 transition duration-300 ease-in-out'}>Dashboard</span></Link>
-                        <Link to={'/dashboard'}><span
-                            className={'text-base font-semibold ml-2 text-primary bg-white shadow-xl py-3 px-8 rounded-full hover:shadow-2xl border border-primary hover:opacity-80 transition duration-300 ease-in-out'}>Guidance</span></Link>
+                        <a target={"_blank"} href={'https://aback-bangle-420.notion.site/Panduan-Penggunaan-Media-Pembelajaran-Interactive-Binary-Search-Tree-d951cc59ac2a4aaf95c84db425863a34'}><span
+                            className={'text-base font-semibold ml-2 text-primary bg-white py-3 px-8 rounded-full hover:shadow-lg border border-primary hover:opacity-80 transition duration-300 ease-in-out'}>Guidance</span></a>
 
                     </div>
 
