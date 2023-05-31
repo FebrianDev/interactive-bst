@@ -11,12 +11,13 @@ import Profile from "./pages/dashboard/profile/Profile";
 import axios from "axios";
 import EditorPageFloat from "./pages/editor/EditorPageFloat";
 import EditorPageString from "./pages/editor/EditorPageString";
+import {URL} from "./URL"
 
 function App() {
 
     const idUser = localStorage.getItem("ID")
 
-    axios.get("http://localhost:6060/api/project/"+idUser)
+    axios.get(`${URL}/api/project/`+idUser)
         .then((result) => {
             console.log(result.data.data)
         }).catch((error) => {

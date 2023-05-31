@@ -11,7 +11,9 @@ export default class BinarySearchTree {
         this.listPostOrder = []
         this.listInOrder = []
         this.explain = []
+        this.listAnimation = []
         this.deleteFail = null
+        this.hoverExplation = new Map()
     }
 
     getLogList() {
@@ -41,11 +43,14 @@ export default class BinarySearchTree {
             this.root = new Node(data)
             ths.newLog.logInsert(data)
             ths.explain.push(`- ${data} sebagai root`)
+            ths.hoverExplation.set(data, `- ${data} sebagai root`)
             return
         } else {
             function searchTree(nodes) {
                 ths.explain.push(`- Bandingkan ${data} dengan ${nodes.data}`)
+                ths.hoverExplation.set(data, `- ${data} sebagai root`)
                 if (data < nodes.data) {
+                    ths.listAnimation.push(nodes.data)
                     ths.explain.push(`- Karena ${data} lebih kecil daripada ${nodes.data}, maka pergi ke simpul sebelah kiri`)
                     if (nodes.left === null) {
                         ths.explain.push(`- Lokasi ditemukan! Tambahkan ${data} ke dalam simpul`)
@@ -56,6 +61,7 @@ export default class BinarySearchTree {
                         return searchTree(nodes.left)
                     }
                 } else if (data > nodes.data || data === nodes.data) {
+                    ths.listAnimation.push(nodes.data)
                     ths.explain.push(`- Karena ${data} lebih besar daripada ${nodes.data}, maka pergi ke simpul sebelah kanan`)
                     if (nodes.right === null) {
                         ths.explain.push(`- Lokasi ditemukan! Tambahkan ${data} ke dalam simpul`)
@@ -94,6 +100,7 @@ export default class BinarySearchTree {
             // if data is less than node's data
         // move left
         else if (data < node.data) {
+            ths.listAnimation.push(node.data)
             ths.explain.push(`- Bandingkan ${data} dengan ${node.data}`)
             ths.explain.push(`- Karena ${data} lebih kecil daripada ${node.data}, maka pergi ke simpul sebelah kiri`)
             return this.search(node.left, data)
@@ -101,6 +108,7 @@ export default class BinarySearchTree {
             // if data is less than node's data
         // move left
         else if (data > node.data) {
+            ths.listAnimation.push(node.data)
             ths.explain.push(`- Bandingkan ${data} dengan ${node.data}`)
             ths.explain.push(`- Karena ${data} lebih besar daripada ${node.data}, maka pergi ke simpul sebelah kanan`)
             return this.search(node.right, data)
@@ -124,6 +132,7 @@ export default class BinarySearchTree {
     }
 
     removeData(nodes, data) {
+        var ths = this
         if (nodes === null) {
             this.explain.push(`- Data ${data} tidak dapat ditemukan!`)
             this.deleteFail = true
@@ -133,10 +142,12 @@ export default class BinarySearchTree {
         this.explain.push(`- Bandingkan ${data} dengan ${nodes.data}`)
 
         if (data < nodes.data) {
+            ths.listAnimation.push(nodes.data)
             this.explain.push(`- Karena ${data} lebih kecil daripada ${nodes.data}, maka pergi ke simpul sebelah kiri`)
             nodes.left = this.removeData(nodes.left, data)
             return nodes
         } else if (data > nodes.data) {
+            ths.listAnimation.push(nodes.data)
             this.explain.push(`- Karena ${data} lebih besar daripada ${nodes.data}, maka pergi ke simpul sebelah kanan`)
             nodes.right = this.removeData(nodes.right, data)
             return nodes
@@ -187,12 +198,15 @@ export default class BinarySearchTree {
     inorder_recursive(node) {
         if (node !== null) {
             this.explain.push(`- Jika data ${node.data} tidak null, maka kunjungi sub pohon sebelah kiri\n`)
+            this.listAnimation.push(node.data)
             this.inorder_recursive(node.left)
             this.explain.push(`- Dapatkan data ${node.data}\n`)
             console.log(node.data)
+            this.listAnimation.push(node.data)
             this.listInOrder.push(node.data)
             this.explain.push(`Hasil ${this.listInOrder}\n\n`)
             this.explain.push(`- Jika ${node.data} tidak null, maka kunjungi sub pohon sebelah kanan\n`)
+            this.listAnimation.push(node.data)
             this.inorder_recursive(node.right)
         } else {
             this.explain.push(`- Karena simpul sama dengan null, maka berhenti melakukan kunjungan pada sub pohon tujuan\n`)
@@ -208,10 +222,13 @@ export default class BinarySearchTree {
         if (node !== null) {
             console.log(node.data)
             this.listPreOrder.push(node.data)
+            this.listAnimation.push(node.data)
             this.explain.push(`- Dapatkan data ${node.data}\n`)
             this.explain.push(`Hasil ${this.listPreOrder}\n\n`)
             this.explain.push(`- Jika data ${node.data} tidak null, maka kunjungi sub pohon sebelah kiri\n`)
+            this.listAnimation.push(node.data)
             this.preorder_recursive(node.left)
+            this.listAnimation.push(node.data)
             this.explain.push(`- Jika ${node.data} tidak null, maka kunjungi sub pohon sebelah kanan\n`)
             this.preorder_recursive(node.right)
         } else {
@@ -227,12 +244,15 @@ export default class BinarySearchTree {
     postorder_recursive(node) {
         if (node !== null) {
             this.explain.push(`- Jika data ${node.data} tidak null, maka kunjungi sub pohon sebelah kiri\n`)
+            this.listAnimation.push(node.data)
             this.postorder_recursive(node.left)
+            this.listAnimation.push(node.data)
             this.explain.push(`- Jika ${node.data} tidak null, maka kunjungi sub pohon sebelah kanan\n`)
             this.postorder_recursive(node.right)
             this.explain.push(`- Dapatkan data ${node.data}\n`)
             console.log(node.data)
             this.listPostOrder.push(node.data)
+            this.listAnimation.push(node.data)
             this.explain.push(`Hasil ${this.listPostOrder}\n\n`)
         } else {
             this.explain.push(`- Karena simpul sama dengan null, maka berhenti melakukan kunjungan pada sub pohon tujuan\n`)
@@ -243,5 +263,13 @@ export default class BinarySearchTree {
         this.listPreOrder = ['Preorder ']
         this.listPostOrder = ['Postorder ']
         this.listInOrder = ['Inorder ']
+    }
+
+    getListAnimation() {
+        return this.listAnimation
+    }
+
+    clearListAnimation() {
+        this.listAnimation = []
     }
 }

@@ -31,6 +31,7 @@ export default function EditorPageString() {
     const [logList, setLogList] = React.useState([])
     const [generate, setGenerate] = useState(null)
     const [language, setLanguage] = useState(null)
+    const [explain, setExplain] = useState([])
 
     const [showModal, setShowModal] = React.useState("hidden")
     let i = 0
@@ -247,6 +248,91 @@ export default function EditorPageString() {
 
     function backToDashboard() {
         navigate("/dashboard")
+    }
+
+    function animation(listData, k) {
+        reset(listData[k])
+        if (k < listData.length) {
+            const data = listData[k]
+            const elements = document.getElementsByClassName('tf-nc')
+            const targetElement = Array.from(elements).find(element => element.textContent.includes(`${data}`))
+            targetElement.style.animation = 'myAnimation 3s ease-in-out'
+            k++
+            setTimeout(animation, 3000, listData, k)
+        }else{
+            showAlert("Preorder", bst.getListPreOrder())
+        }
+    }
+
+    function animationInsert(listData, k) {
+        reset(listData[k])
+        if (k < listData.length) {
+            const data = listData[k]
+            const elements = document.getElementsByClassName('tf-nc')
+            const targetElement = Array.from(elements).find(element => element.textContent.includes(`${data}`))
+            targetElement.style.animation = 'myAnimation 3s ease-in-out'
+            k++
+            setTimeout(animationInsert, 3000, listData, k)
+        } else {
+            showAlert("Success", "Berhasil Insert Data")
+
+            setRoot((prev) => ({...prev, ...bst.root}))
+            updateLog()
+            setExplain(bst.explain)
+        }
+    }
+
+    function animationDelete(listData, k) {
+        reset(listData[k])
+        if (k < listData.length) {
+            const data = listData[k]
+            const elements = document.getElementsByClassName('tf-nc')
+            const targetElement = Array.from(elements).find(element => element.textContent.includes(`${data}`))
+            targetElement.style.animation = 'myAnimation 3s ease-in-out'
+            k++
+            setTimeout(animationDelete, 3000, listData, k)
+        } else {
+
+            if (bst.deleteFail)
+                showAlertError("Data tidak ditemukan!")
+            else
+                showAlert("Success", "Berhasil Delete Data")
+
+            setRoot((prev) => ({...prev, ...bst.root}))
+            updateLog()
+            setExplain(bst.explain)
+        }
+    }
+
+    function animationSearch(listData, k, finalData) {
+        reset(listData[k])
+        if (k < listData.length) {
+            const data = listData[k]
+            const elements = document.getElementsByClassName('tf-nc')
+            const targetElement = Array.from(elements).find(element => element.textContent.includes(`${data}`))
+            targetElement.style.animation = 'myAnimation 3s ease-in-out'
+            k++
+            setTimeout(animationSearch, 3000, listData, k, finalData)
+        } else {
+
+            if (finalData !== "") {
+                showAlert("Success", `Data ${finalData} ditemukan`)
+                updateLog()
+            } else {
+                showAlertError('Data tidak ditemukan!')
+            }
+
+            setExplain(bst.explain)
+        }
+    }
+
+    function reset(value) {
+        const elements = document.getElementsByClassName('tf-nc')
+        const targetElement = Array.from(elements).find(element => element.textContent.includes(`${value}`))
+        if (targetElement === null || targetElement === undefined) return
+        targetElement.style.animation = 'none'
+        void targetElement.offsetHeight /* trigger reflow */
+        targetElement.style.animation = null
     }
 
     return (
@@ -493,7 +579,7 @@ export default function EditorPageString() {
             {/*Render*/}
             <div className="container-editor relative mt-32">
 
-                {<div className="tf-tree tf-custom">
+                {<div className="tf-tree tf-custom hover:bg-yellowPrimary bg-black">
                     <ul>
                         <li className={"transition ease-in-out delay-1150"}>
                             <Tree data={root}/>
@@ -506,7 +592,7 @@ export default function EditorPageString() {
             {/*List Start*/}
             <ul className="list-disc w-80 h-96 p-2 fixed top-0 right-1 overflow-scroll mt-32">
                 <h2 className={"font-bold"}>Explain</h2>
-                {bst.getExplain().map((explain) =>
+                {explain.map((explain) =>
                     <li>{explain}</li>
                 )}
 

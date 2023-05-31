@@ -35,6 +35,8 @@ export default function EditorPageInt() {
     const [generate, setGenerate] = useState(null)
     const [language, setLanguage] = useState(null)
     const [explain, setExplain] = useState([])
+    const [listValue, setListValue] = useState([])
+    let list = []
 
     const [showModal, setShowModal] = React.useState("hidden")
     let i = 0
@@ -46,7 +48,7 @@ export default function EditorPageInt() {
         axios.get(`${URL}/api/project/id/${pathname}`, {}).then(
             (data) => {
                 setProjectName(data.data.data.name_project)
-                if(data.data.data.data_type !== "Int") backToDashboard()
+                if (data.data.data.data_type !== "Int") backToDashboard()
 
                 if (root.length > 0 || i > 0) return
 
@@ -71,15 +73,17 @@ export default function EditorPageInt() {
 
                         if (key === "insert") {
                             insert(value)
+                            list.push(value)
                             console.log("insert")
                         } else if (key === "delete") {
                             deleteAwake(value)
+                            list = list.filter(item => item !== value)
                         } else if (key === "search") searchAwake(value)
                     }
 
                     i++
                 })
-
+                setListValue(list)
                 bst.clearExplain()
             })
     }, [])
@@ -106,23 +110,23 @@ export default function EditorPageInt() {
 
     function Insert() {
         bst.clearExplain()
+        bst.clearListAnimation()
         const data = parseInt(refInsert.current.value)
         if (isNaN(data)) {
             showAlertError("Input tidak valid!")
             refInsert.current.value = ""
             return
         }
-        showAlert("Success", "Berhasil Insert Data")
-        bst.insert(data)
-        setRoot((prev) => ({...prev, ...bst.root}))
-        updateLog()
-        setExplain(bst.explain)
-        refInsert.current.value = ""
 
+        // showAlert("Success", "Berhasil Insert Data")
+        bst.insert(data)
+        animationInsert(bst.listAnimation, 0)
+        refInsert.current.value = ""
     }
 
     function Delete() {
         bst.clearExplain()
+        bst.clearListAnimation()
         const data = parseInt(refDelete.current.value)
         if (isNaN(data)) {
             showAlertError("Input tidak valid!")
@@ -131,33 +135,22 @@ export default function EditorPageInt() {
         }
 
         bst.delete(data)
-        if (bst.deleteFail)
-            showAlertError("Data tidak ditemukan!")
-        else
-            showAlert("Success", "Berhasil Delete Data")
 
-        setRoot((prev) => ({...prev, ...bst.root}))
-        updateLog()
-        setExplain(bst.explain)
+        animationDelete(bst.listAnimation, 0)
+
         refDelete.current.value = ""
     }
 
     function Search() {
         bst.clearExplain()
+        bst.clearListAnimation()
         const data = parseInt(refSearch.current.value)
         if (isNaN(data)) {
             showAlertError("Input tidak valid!")
             return
         }
         const finalData = bst.search(bst.getRootNode(), data)
-        if (finalData !== "") {
-            showAlert("Success", `Data ${finalData} ditemukan`)
-            updateLog()
-        } else {
-            showAlertError('Data tidak ditemukan!')
-        }
-
-        setExplain(bst.explain)
+        animationSearch(bst.listAnimation, 0, finalData)
 
         refSearch.current.value = ""
     }
@@ -186,32 +179,44 @@ export default function EditorPageInt() {
     function preOrder() {
         bst.clearList()
         bst.clearExplain()
+        bst.clearListAnimation()
 
         bst.preorder(bst.getRootNode())
         bst.getListPreOrder()
-        showAlert("Preorder", bst.getListPreOrder())
+        //  showAlert("Preorder", bst.getListPreOrder())
         updateLog()
         setExplain(bst.explain)
+        console.log("inorder list")
+        console.log(bst.listAnimation)
+        animation(bst.listAnimation, 0)
     }
 
     function postOrder() {
         bst.clearList()
         bst.clearExplain()
+        bst.clearListAnimation()
         bst.postorder(bst.getRootNode())
         bst.getListPostOrder()
-        showAlert("Postorder", bst.getListPostOrder())
+        //  showAlert("Postorder", bst.getListPostOrder())
         updateLog()
         setExplain(bst.explain)
+        console.log("inorder list")
+        console.log(bst.listAnimation)
+        animation(bst.listAnimation, 0)
     }
 
     function inOrder() {
         bst.clearList()
         bst.clearExplain()
+        bst.clearListAnimation()
         bst.inorder(bst.getRootNode())
         bst.getListInOrder()
-        showAlert("Inorder", bst.getListInOrder())
+        //    showAlert("Inorder", bst.getListInOrder())
         updateLog()
         setExplain(bst.explain)
+        console.log("inorder list")
+        console.log(bst.listAnimation)
+        animation(bst.listAnimation, 0)
     }
 
     function updateLog() {
@@ -275,13 +280,97 @@ export default function EditorPageInt() {
         navigate("/dashboard")
     }
 
+    function animation(listData, k) {
+        reset(listData[k])
+        if (k < listData.length) {
+            const data = listData[k]
+            const elements = document.getElementsByClassName('tf-nc')
+            const targetElement = Array.from(elements).find(element => element.textContent.includes(`${data}`))
+            targetElement.style.animation = 'myAnimation 3s ease-in-out'
+            k++
+            setTimeout(animation, 3000, listData, k)
+        }else{
+            showAlert("Preorder", bst.getListPreOrder())
+        }
+    }
+
+    function animationInsert(listData, k) {
+        reset(listData[k])
+        if (k < listData.length) {
+            const data = listData[k]
+            const elements = document.getElementsByClassName('tf-nc')
+            const targetElement = Array.from(elements).find(element => element.textContent.includes(`${data}`))
+            targetElement.style.animation = 'myAnimation 3s ease-in-out'
+            k++
+            setTimeout(animationInsert, 3000, listData, k)
+        } else {
+            showAlert("Success", "Berhasil Insert Data")
+
+            setRoot((prev) => ({...prev, ...bst.root}))
+            updateLog()
+            setExplain(bst.explain)
+        }
+    }
+
+    function animationDelete(listData, k) {
+        reset(listData[k])
+        if (k < listData.length) {
+            const data = listData[k]
+            const elements = document.getElementsByClassName('tf-nc')
+            const targetElement = Array.from(elements).find(element => element.textContent.includes(`${data}`))
+            targetElement.style.animation = 'myAnimation 3s ease-in-out'
+            k++
+            setTimeout(animationDelete, 3000, listData, k)
+        } else {
+
+            if (bst.deleteFail)
+                showAlertError("Data tidak ditemukan!")
+            else
+                showAlert("Success", "Berhasil Delete Data")
+
+            setRoot((prev) => ({...prev, ...bst.root}))
+            updateLog()
+            setExplain(bst.explain)
+        }
+    }
+
+    function animationSearch(listData, k, finalData) {
+        reset(listData[k])
+        if (k < listData.length) {
+            const data = listData[k]
+            const elements = document.getElementsByClassName('tf-nc')
+            const targetElement = Array.from(elements).find(element => element.textContent.includes(`${data}`))
+            targetElement.style.animation = 'myAnimation 3s ease-in-out'
+            k++
+            setTimeout(animationSearch, 3000, listData, k, finalData)
+        } else {
+
+            if (finalData !== "") {
+                showAlert("Success", `Data ${finalData} ditemukan`)
+                updateLog()
+            } else {
+                showAlertError('Data tidak ditemukan!')
+            }
+
+            setExplain(bst.explain)
+        }
+    }
+
+    function reset(value) {
+        const elements = document.getElementsByClassName('tf-nc')
+        const targetElement = Array.from(elements).find(element => element.textContent.includes(`${value}`))
+        if (targetElement === null || targetElement === undefined) return
+        targetElement.style.animation = 'none'
+        void targetElement.offsetHeight /* trigger reflow */
+        targetElement.style.animation = null
+    }
+
     return (
         <>
-
             <Icon icon="typcn:arrow-back" className={"absolute text-primary ml-8 top-8"} width="64" height="64"
                   onClick={backToDashboard}/>
 
-            <h1 className={"absolute text-primary ml-28 top-12 font-bold text-xl"}>{projectName}</h1>
+            <h1 className={"absolute text-primary ml-28 top-10 font-bold text-4xl"}>{projectName}</h1>
 
             <aside className="w-36 fixed top-0 inline-block" aria-label="Sidebar">
                 <div className="bg-black">
