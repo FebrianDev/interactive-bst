@@ -97,22 +97,21 @@ export default function EditorPageFloat() {
 
     function Insert() {
         bst.clearExplain()
+        bst.clearListAnimation()
         const data = parseFloat(refInsert.current.value)
         if (isNaN(data)) {
             showAlertError('Data tidak ditemukan!')
             refInsert.current.value = ""
             return
         }
-        showAlert("Success", "Berhasil Insert Data")
         bst.insert(data)
-        setRoot((prev) => ({...prev, ...bst.root}))
-        updateLog()
+        animationInsert(bst.listAnimation, 0)
         refInsert.current.value = ""
     }
 
     function Delete() {
-
         bst.clearExplain()
+        bst.clearListAnimation()
         const data = parseFloat(refDelete.current.value)
         if (isNaN(data)) {
             showAlertError('Data tidak ditemukan!')
@@ -120,18 +119,13 @@ export default function EditorPageFloat() {
             return
         }
         bst.delete(data)
-        if (bst.deleteFail)
-            showAlertError('Data tidak ditemukan!')
-        else
-            showAlert("Success", "Berhasil Delete Data")
-        setRoot((prev) => ({...prev, ...bst.root}))
-        updateLog()
+        animationDelete(bst.listAnimation, 0)
         refDelete.current.value = ""
     }
 
     function Search() {
-
         bst.clearExplain()
+        bst.clearListAnimation()
         const data = parseFloat(refSearch.current.value)
         if (isNaN(data)) {
             showAlertError("Input tidak valid!")
@@ -140,12 +134,7 @@ export default function EditorPageFloat() {
         }
 
         const finalData = bst.search(bst.getRootNode(), data)
-        if (finalData !== "") {
-            showAlert("Success", `Data ${finalData} ditemukan`)
-            updateLog()
-        } else {
-            showAlertError('Data tidak ditemukan!')
-        }
+        animationSearch(bst.listAnimation, 0, finalData)
 
         refSearch.current.value = ""
     }
@@ -171,25 +160,38 @@ export default function EditorPageFloat() {
     function preOrder() {
         bst.clearList()
         bst.clearExplain()
+        bst.clearListAnimation()
+
         bst.preorder(bst.getRootNode())
-        showAlert("Preorder", bst.getListPreOrder())
+        bst.getListPreOrder()
+
         updateLog()
+        setExplain(bst.explain)
+
+        animationPreOrder(bst.listAnimation, 0)
+
     }
 
     function postOrder() {
         bst.clearList()
         bst.clearExplain()
+        bst.clearListAnimation()
         bst.postorder(bst.getRootNode())
-        showAlert("Postorder", bst.getListPostOrder())
+        bst.getListPostOrder()
         updateLog()
+        setExplain(bst.explain)
+        animationPostorder(bst.listAnimation, 0)
     }
 
     function inOrder() {
         bst.clearList()
         bst.clearExplain()
+        bst.clearListAnimation()
         bst.inorder(bst.getRootNode())
-        showAlert("Inorder", bst.getListInOrder())
+        bst.getListInOrder()
         updateLog()
+        setExplain(bst.explain)
+        animationInorder(bst.listAnimation, 0)
     }
 
     function updateLog() {
@@ -198,7 +200,7 @@ export default function EditorPageFloat() {
         const final = bst.getLog()
         console.log("Final" + final)
         const update = {bst_operation: final}
-        axios.put(`https://interactive-bst-backend-production.up.railway.app/api/project/id/${pathname}`, update)
+        axios.put(`${URL}api/project/id/${pathname}`, update)
             .then(
                 response => console.log(response.data.status)
             )
@@ -254,7 +256,7 @@ export default function EditorPageFloat() {
         navigate("/dashboard")
     }
 
-    function animation(listData, k) {
+    function animationPreOrder(listData, k) {
         reset(listData[k])
         if (k < listData.length) {
             const data = listData[k]
@@ -262,9 +264,37 @@ export default function EditorPageFloat() {
             const targetElement = Array.from(elements).find(element => element.textContent.includes(`${data}`))
             targetElement.style.animation = 'myAnimation 3s ease-in-out'
             k++
-            setTimeout(animation, 3000, listData, k)
+            setTimeout(animationPreOrder, 3000, listData, k)
         }else{
             showAlert("Preorder", bst.getListPreOrder())
+        }
+    }
+
+    function animationInorder(listData, k) {
+        reset(listData[k])
+        if (k < listData.length) {
+            const data = listData[k]
+            const elements = document.getElementsByClassName('tf-nc')
+            const targetElement = Array.from(elements).find(element => element.textContent.includes(`${data}`))
+            targetElement.style.animation = 'myAnimation 3s ease-in-out'
+            k++
+            setTimeout(animationInorder, 3000, listData, k)
+        }else{
+            showAlert("Inorder", bst.getListInOrder())
+        }
+    }
+
+    function animationPostorder(listData, k) {
+        reset(listData[k])
+        if (k < listData.length) {
+            const data = listData[k]
+            const elements = document.getElementsByClassName('tf-nc')
+            const targetElement = Array.from(elements).find(element => element.textContent.includes(`${data}`))
+            targetElement.style.animation = 'myAnimation 3s ease-in-out'
+            k++
+            setTimeout(animationPostorder, 3000, listData, k)
+        }else{
+            showAlert("Postorder", bst.getListPostOrder())
         }
     }
 

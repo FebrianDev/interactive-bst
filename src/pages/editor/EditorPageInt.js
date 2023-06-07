@@ -118,7 +118,6 @@ export default function EditorPageInt() {
             return
         }
 
-        // showAlert("Success", "Berhasil Insert Data")
         bst.insert(data)
         animationInsert(bst.listAnimation, 0)
         refInsert.current.value = ""
@@ -183,12 +182,11 @@ export default function EditorPageInt() {
 
         bst.preorder(bst.getRootNode())
         bst.getListPreOrder()
-        //  showAlert("Preorder", bst.getListPreOrder())
+
         updateLog()
         setExplain(bst.explain)
-        console.log("inorder list")
-        console.log(bst.listAnimation)
-        animation(bst.listAnimation, 0)
+
+        animationPreOrder(bst.listAnimation, 0)
     }
 
     function postOrder() {
@@ -197,12 +195,10 @@ export default function EditorPageInt() {
         bst.clearListAnimation()
         bst.postorder(bst.getRootNode())
         bst.getListPostOrder()
-        //  showAlert("Postorder", bst.getListPostOrder())
+
         updateLog()
         setExplain(bst.explain)
-        console.log("inorder list")
-        console.log(bst.listAnimation)
-        animation(bst.listAnimation, 0)
+        animationPostorder(bst.listAnimation, 0)
     }
 
     function inOrder() {
@@ -211,12 +207,9 @@ export default function EditorPageInt() {
         bst.clearListAnimation()
         bst.inorder(bst.getRootNode())
         bst.getListInOrder()
-        //    showAlert("Inorder", bst.getListInOrder())
         updateLog()
         setExplain(bst.explain)
-        console.log("inorder list")
-        console.log(bst.listAnimation)
-        animation(bst.listAnimation, 0)
+        animationInorder(bst.listAnimation, 0)
     }
 
     function updateLog() {
@@ -280,7 +273,7 @@ export default function EditorPageInt() {
         navigate("/dashboard")
     }
 
-    function animation(listData, k) {
+    function animationPreOrder(listData, k) {
         reset(listData[k])
         if (k < listData.length) {
             const data = listData[k]
@@ -288,9 +281,37 @@ export default function EditorPageInt() {
             const targetElement = Array.from(elements).find(element => element.textContent.includes(`${data}`))
             targetElement.style.animation = 'myAnimation 3s ease-in-out'
             k++
-            setTimeout(animation, 3000, listData, k)
+            setTimeout(animationPreOrder, 3000, listData, k)
         }else{
             showAlert("Preorder", bst.getListPreOrder())
+        }
+    }
+
+    function animationInorder(listData, k) {
+        reset(listData[k])
+        if (k < listData.length) {
+            const data = listData[k]
+            const elements = document.getElementsByClassName('tf-nc')
+            const targetElement = Array.from(elements).find(element => element.textContent.includes(`${data}`))
+            targetElement.style.animation = 'myAnimation 3s ease-in-out'
+            k++
+            setTimeout(animationInorder, 3000, listData, k)
+        }else{
+            showAlert("Inorder", bst.getListInOrder())
+        }
+    }
+
+    function animationPostorder(listData, k) {
+        reset(listData[k])
+        if (k < listData.length) {
+            const data = listData[k]
+            const elements = document.getElementsByClassName('tf-nc')
+            const targetElement = Array.from(elements).find(element => element.textContent.includes(`${data}`))
+            targetElement.style.animation = 'myAnimation 3s ease-in-out'
+            k++
+            setTimeout(animationPostorder, 3000, listData, k)
+        }else{
+            showAlert("Postorder", bst.getListPostOrder())
         }
     }
 
