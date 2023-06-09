@@ -141,7 +141,8 @@ export default function (listLog){
     
         public static void main(String[] args) {
             BinarySearchTree bst = new BinarySearchTree();
-            ${listLog.map(d => "bst."+d.toString()+";\n\t").toString().replace(/,/g, "")}
+            ${listLog.map(d => (d.toString().includes("delete") === true) ? "bst."+d.toString().replace("delete", "remove")+";\n\t": "bst."+d.toString() +";\n\t").toString().replace(/,/g, "")}
         }
+    }
     `
 }

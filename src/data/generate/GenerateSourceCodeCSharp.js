@@ -1,8 +1,9 @@
 export default function (listLog) {
-
-    if(listLog === null) return
+    listLog.map((d) => console.log("List1" + d))
+    if (listLog === null) return
 
     return `
+    using System;\n
       class Node
 {
     public Node LeftNode { get; set; }
@@ -113,49 +114,59 @@ class BinarySearchTree
     /*Delete End*/
 
     /*Preorder Start*/
-    public void preOrder(Node parent)
+    public void preorder(Node parent)
     {
         if (parent != null)
         {
             Console.Write(parent.Data + " ");
-            preOrder(parent.LeftNode);
-            preOrder(parent.RightNode);
+            preorder(parent.LeftNode);
+            preorder(parent.RightNode);
         }
     }
     /*Preorder End*/
 
     /*Inorder Start*/
-    public void inOrder(Node parent)
+    public void inorder(Node parent)
     {
         if (parent != null)
         {
-            inOrder(parent.LeftNode);
+            inorder(parent.LeftNode);
             Console.Write(parent.Data + " ");
-            inOrder(parent.RightNode);
+            inorder(parent.RightNode);
         }
     }
     /*Inorder End*/
 
     /*Postorder Start*/
-    public void postOrder(Node parent)
+    public void postorder(Node parent)
     {
         if (parent != null)
         {
-            postOrder(parent.LeftNode);
-            postOrder(parent.RightNode);
+            postorder(parent.LeftNode);
+            postorder(parent.RightNode);
             Console.Write(parent.Data + " ");
         }
     }
-    /*Postorder End*/
+    /*Postorder End*/ 
 }
-
+`+`
 public class Program
 {
     public static void Main()
     {
         BinarySearchTree bst = new BinarySearchTree();
-        ${listLog.map(d => "bst." + d.toString() + ";\n\t").toString().replace(/,/g, "")}
+       
+        ${listLog.map(d => {
+        const newData = d.toString().replace(/,/g, "")
+        if (newData === "preorder()") return ("bst.preorder(bst.Root)" + ";") + "\n\t"
+
+        else if (newData === "postorder()") return ("bst.postorder(bst.Root)" + ";") + "\n\t"
+        else if (newData === "inorder()") return ("bst.inorder(bst.Root)" + ";") + "\n\t"
+        else return ("bst." + newData + ";").toString() + "\n\t"
+        })
+
+        }
     }
 }
-    `
+    `.replaceAll(/,/g, "")
 }

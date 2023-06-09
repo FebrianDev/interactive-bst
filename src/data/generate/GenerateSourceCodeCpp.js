@@ -185,7 +185,7 @@ public:
     
     int main() {
          BinarySearchTree bst = BinarySearchTree();
-         ${listLog.map(d => "bst." + d.toString() + ";\n\t").toString().replace(/,/g, "")}
+         ${listLog.map(d =>(d.toString().includes("delete")) ? "bst."+d.toString().replace("delete", "remove")+ ";\n\t" : "bst."+d.toString() + ";\n\t").toString().replace(/,/g, "")}
     }
 `
 }

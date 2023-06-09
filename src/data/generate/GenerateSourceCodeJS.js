@@ -76,7 +76,7 @@ export default function generateJS(listLog) {
         /*Search Data End*/
     
         /*Delete Data Start*/
-        remove(data) {
+        delete(data) {
             this.root = this.removeData(this.root, data)
         }
     
@@ -90,7 +90,6 @@ export default function generateJS(listLog) {
                 nodes.right = this.removeData(nodes.right, data)
                 return nodes
             } else {
-                this.newLog.logDelete(data)
                 if (nodes.left === null && nodes.right === null) {
                     nodes = null
                     return nodes

@@ -279,7 +279,7 @@ export default function EditorPageInt() {
             const data = listData[k]
             const elements = document.getElementsByClassName('tf-nc')
             const targetElement = Array.from(elements).find(element => element.textContent.includes(`${data}`))
-            targetElement.style.animation = 'myAnimation 3s ease-in-out'
+            targetElement.style.animation = 'myAnimation 1s ease-in-out'
             k++
             setTimeout(animationPreOrder, 3000, listData, k)
         }else{
@@ -293,7 +293,7 @@ export default function EditorPageInt() {
             const data = listData[k]
             const elements = document.getElementsByClassName('tf-nc')
             const targetElement = Array.from(elements).find(element => element.textContent.includes(`${data}`))
-            targetElement.style.animation = 'myAnimation 3s ease-in-out'
+            targetElement.style.animation = 'myAnimation 1s ease-in-out'
             k++
             setTimeout(animationInorder, 3000, listData, k)
         }else{
@@ -307,7 +307,7 @@ export default function EditorPageInt() {
             const data = listData[k]
             const elements = document.getElementsByClassName('tf-nc')
             const targetElement = Array.from(elements).find(element => element.textContent.includes(`${data}`))
-            targetElement.style.animation = 'myAnimation 3s ease-in-out'
+            targetElement.style.animation = 'myAnimation 1s ease-in-out'
             k++
             setTimeout(animationPostorder, 3000, listData, k)
         }else{
@@ -321,7 +321,7 @@ export default function EditorPageInt() {
             const data = listData[k]
             const elements = document.getElementsByClassName('tf-nc')
             const targetElement = Array.from(elements).find(element => element.textContent.includes(`${data}`))
-            targetElement.style.animation = 'myAnimation 3s ease-in-out'
+            targetElement.style.animation = 'myAnimation 1s ease-in-out'
             k++
             setTimeout(animationInsert, 3000, listData, k)
         } else {
@@ -339,7 +339,7 @@ export default function EditorPageInt() {
             const data = listData[k]
             const elements = document.getElementsByClassName('tf-nc')
             const targetElement = Array.from(elements).find(element => element.textContent.includes(`${data}`))
-            targetElement.style.animation = 'myAnimation 3s ease-in-out'
+            targetElement.style.animation = 'myAnimation 1s ease-in-out'
             k++
             setTimeout(animationDelete, 3000, listData, k)
         } else {
@@ -361,7 +361,7 @@ export default function EditorPageInt() {
             const data = listData[k]
             const elements = document.getElementsByClassName('tf-nc')
             const targetElement = Array.from(elements).find(element => element.textContent.includes(`${data}`))
-            targetElement.style.animation = 'myAnimation 3s ease-in-out'
+            targetElement.style.animation = 'myAnimation 1s ease-in-out'
             k++
             setTimeout(animationSearch, 3000, listData, k, finalData)
         } else {

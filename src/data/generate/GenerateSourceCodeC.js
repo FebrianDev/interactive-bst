@@ -49,13 +49,13 @@ export default function (listLog) {
     }
     
     // function to delete a node
-    struct node *delete(struct node *root, int x) {
+    struct node *removeData(struct node *root, int x) {
         if (root == NULL)
             return NULL;
         if (x > root->data)
-            root->right = delete(root->right, x);
+            root->right = removeData(root->right, x);
         else if (x < root->data)
-            root->left = delete(root->left, x);
+            root->left = removeData(root->left, x);
         else {
             if (root->left == NULL && root->right == NULL) {
                 free(root);
@@ -71,7 +71,7 @@ export default function (listLog) {
             } else {
                 struct node *temp = find_minimum(root->right);
                 root->data = temp->data;
-                root->right = delete(root->right, temp->data);
+                root->right = removeData(root->right, temp->data);
             }
         }
         return root;
@@ -85,9 +85,9 @@ export default function (listLog) {
         }
     }
     
-    void preorder(struct node *root) {
+   void preorder(struct node *root) {
         if (root != NULL) {
-            printf(" %d ") << (int)root->data;
+            printf(" %d ", root->data);
             preorder(root->left);
             preorder(root->right);
         }
@@ -110,8 +110,8 @@ export default function (listLog) {
         const key = data.split("(")[0]
         const value = data.split("(")[1].split(")")[0]
         if (key === "insert") newList.push("insert(root"+"! "+ value + ")")
-        else if (key === "delete") newList.push(`delete(root! ${value})`)
-        else if(key === "search") newList.push(`search(root! ${value})`)
+        else if (key === "delete") newList.push(`removeData(root! ${value})`)
+        else if(key === "search") newList.push(`search(root! ${value})->data`)
         else if(key === "inorder") newList.push("inorder(root)")
         else if(key === "preorder") newList.push("preorder(root)")
         else if(key === "postorder") newList.push("postorder(root)")
