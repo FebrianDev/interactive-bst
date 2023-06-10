@@ -16,8 +16,6 @@ export default function () {
 
     const idUser = localStorage.getItem("ID")
 
-    console.log("Id User " + idUser)
-
     function createProject() {
 
         const data = {
@@ -48,7 +46,7 @@ export default function () {
             navigate(`/dashboard/editor-int/${id}`)
         else if (dataType === "String")
             navigate(`/dashboard/editor-string/${id}`)
-        else if (dataType === "String")
+        else if (dataType === "Float")
             navigate(`/dashboard/editor-float/${id}`)
     }
 

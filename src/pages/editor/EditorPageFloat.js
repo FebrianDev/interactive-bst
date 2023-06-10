@@ -4,13 +4,14 @@ import React, {useRef, useState} from "react"
 import axios from "axios"
 import Swal from "sweetalert2"
 import {Icon} from "@iconify/react/dist/iconify"
-import generateSourceCodeC from "../../data/generate/GenerateSourceCodeC"
-import generateSourceCodeCpp from "../../data/generate/GenerateSourceCodeCpp"
-import generateSourceCodeJava from "../../data/generate/GenerateSourceCodeJava"
+import generateSourceCodeC from "../../data/generate-float/GenerateSourceCodeCFloat"
+import generateSourceCodeCpp from "../../data/generate-float/GenerateSourceCodeCppFloat"
+import generateSourceCodeJava from "../../data/generate-float/GenerateSourceCodeJavaFloat"
 import generateJS from "../../data/generate/GenerateSourceCodeJS"
 import GenerateSourceCode from "./GenerateSourceCode"
 import Tree from "./Render"
 import {URL} from "../../URL"
+import generateSourceCodeCSharp from "../../data/generate-float/GenerateSourceCodeCSharpFloat";
 
 const bst = new BinarySearchTree()
 
@@ -195,12 +196,10 @@ export default function EditorPageFloat() {
     }
 
     function updateLog() {
-        console.log(bst.getLogList())
         setLogList(bst.getLogList())
         const final = bst.getLog()
-        console.log("Final" + final)
         const update = {bst_operation: final}
-        axios.put(`${URL}api/project/id/${pathname}`, update)
+        axios.put(`${URL}/api/project/id/${pathname}`, update)
             .then(
                 response => console.log(response.data.status)
             )
@@ -262,7 +261,7 @@ export default function EditorPageFloat() {
             const data = listData[k]
             const elements = document.getElementsByClassName('tf-nc')
             const targetElement = Array.from(elements).find(element => element.textContent.includes(`${data}`))
-            targetElement.style.animation = 'myAnimation 3s ease-in-out'
+            targetElement.style.animation = 'myAnimation 1s ease-in-out'
             k++
             setTimeout(animationPreOrder, 3000, listData, k)
         }else{
@@ -276,7 +275,7 @@ export default function EditorPageFloat() {
             const data = listData[k]
             const elements = document.getElementsByClassName('tf-nc')
             const targetElement = Array.from(elements).find(element => element.textContent.includes(`${data}`))
-            targetElement.style.animation = 'myAnimation 3s ease-in-out'
+            targetElement.style.animation = 'myAnimation 1s ease-in-out'
             k++
             setTimeout(animationInorder, 3000, listData, k)
         }else{
@@ -290,7 +289,7 @@ export default function EditorPageFloat() {
             const data = listData[k]
             const elements = document.getElementsByClassName('tf-nc')
             const targetElement = Array.from(elements).find(element => element.textContent.includes(`${data}`))
-            targetElement.style.animation = 'myAnimation 3s ease-in-out'
+            targetElement.style.animation = 'myAnimation 1s ease-in-out'
             k++
             setTimeout(animationPostorder, 3000, listData, k)
         }else{
@@ -304,7 +303,7 @@ export default function EditorPageFloat() {
             const data = listData[k]
             const elements = document.getElementsByClassName('tf-nc')
             const targetElement = Array.from(elements).find(element => element.textContent.includes(`${data}`))
-            targetElement.style.animation = 'myAnimation 3s ease-in-out'
+            targetElement.style.animation = 'myAnimation 1s ease-in-out'
             k++
             setTimeout(animationInsert, 3000, listData, k)
         } else {
@@ -322,7 +321,7 @@ export default function EditorPageFloat() {
             const data = listData[k]
             const elements = document.getElementsByClassName('tf-nc')
             const targetElement = Array.from(elements).find(element => element.textContent.includes(`${data}`))
-            targetElement.style.animation = 'myAnimation 3s ease-in-out'
+            targetElement.style.animation = 'myAnimation 1s ease-in-out'
             k++
             setTimeout(animationDelete, 3000, listData, k)
         } else {
@@ -344,7 +343,7 @@ export default function EditorPageFloat() {
             const data = listData[k]
             const elements = document.getElementsByClassName('tf-nc')
             const targetElement = Array.from(elements).find(element => element.textContent.includes(`${data}`))
-            targetElement.style.animation = 'myAnimation 3s ease-in-out'
+            targetElement.style.animation = 'myAnimation 1s ease-in-out'
             k++
             setTimeout(animationSearch, 3000, listData, k, finalData)
         } else {
@@ -556,6 +555,16 @@ export default function EditorPageFloat() {
                                     className="flex-1 ml-3 whitespace-nowrap text-white text-bold">C++</span></a>
                         </li>
                         {/*Export C++ End*/}
+
+                        {/*Export C# Start*/}
+                        <li className={"border-b-2 border-white"}>
+                            <a
+                                onClick={exportCode.bind(this, generateSourceCodeCSharp(logList), "C#")}
+                                className="flex items-center p-2 text-base font-normal text-gray-900 dark:text-white hover:bg-dark">
+                                <span
+                                    className="flex-1 ml-3 whitespace-nowrap text-white text-bold">C#</span></a>
+                        </li>
+                        {/*Export C# End*/}
 
                         {/*Export Java Start*/}
                         <li className={"border-b-2 border-white"}>

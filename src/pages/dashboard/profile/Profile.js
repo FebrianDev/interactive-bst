@@ -12,7 +12,9 @@ export default function () {
 
     const [errorState, setErrorState] = useState("")
 
-    axios.get(`${URL}/api/user/1`
+    const idUser = localStorage.getItem("ID")
+
+    axios.get(`${URL}/api/user/${idUser}`
     ).then(data => {
         const user = data.data.data
         setName(user.name)
