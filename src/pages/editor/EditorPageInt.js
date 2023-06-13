@@ -213,7 +213,6 @@ export default function EditorPageInt() {
     }
 
     function updateLog() {
-        console.log(bst.getLogList())
         setLogList(bst.getLogList())
         const final = bst.getLog()
         const update = {bst_operation: final}

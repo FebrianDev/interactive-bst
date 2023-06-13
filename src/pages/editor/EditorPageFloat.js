@@ -189,7 +189,7 @@ export default function EditorPageFloat() {
         bst.clearExplain()
         bst.clearListAnimation()
         bst.inorder(bst.getRootNode())
-        bst.getListInOrder()
+       bst.getListInOrder()
         updateLog()
         setExplain(bst.explain)
         animationInorder(bst.listAnimation, 0)
@@ -374,7 +374,7 @@ export default function EditorPageFloat() {
             <Icon icon="typcn:arrow-back" className={"absolute text-primary ml-8 top-8"} width="64" height="64"
                   onClick={backToDashboard}/>
 
-            <h1 className={"absolute text-primary ml-28 top-12 font-bold text-xl"}>{projectName}</h1>
+            <h1 className={"absolute text-primary ml-28 top-10 font-bold text-4xl"}>{projectName}</h1>
 
             <aside className="w-36 fixed top-0 inline-block" aria-label="Sidebar">
                 <div className="bg-black">
