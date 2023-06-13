@@ -7,8 +7,8 @@ import {useLocation, useNavigate} from "react-router-dom"
 import BinarySearchTree from "../../data/BinarySearchTree"
 import axios from 'axios'
 import GenerateSourceCode from "./GenerateSourceCode"
-import generateSourceCodeCpp from "../../data/generate/GenerateSourceCodeCpp"
-import generateSourceCodeJava from "../../data/generate/GenerateSourceCodeJava"
+import generateSourceCodeCpp from "../../data/generate-string/GenerateSourceCodeCppString"
+import generateSourceCodeJava from "../../data/generate-string/GenerateSourceCodeJavaString"
 import generateSourceCodeC from "../../data/generate/GenerateSourceCodeC"
 import Swal from "sweetalert2"
 import {URL} from "../../URL"
@@ -44,7 +44,7 @@ export default function EditorPageString() {
         axios.get(`${URL}/api/project/id/${pathname}`, {}).then(
             (data) => {
                 setProjectName(data.data.data.name_project)
-                if(data.data.data.data_type !== "String") backToDashboard()
+                if (data.data.data.data_type !== "String") backToDashboard()
 
                 if (root.length > 0 || i > 0) return
                 console.log(data)
@@ -155,7 +155,7 @@ export default function EditorPageString() {
         bst.clearListAnimation()
 
         bst.preorder(bst.getRootNode())
-        bst.getListPreOrder()
+      //  bst.getListPreOrder()
 
         updateLog()
         setExplain(bst.explain)
@@ -169,7 +169,7 @@ export default function EditorPageString() {
         bst.clearExplain()
         bst.clearListAnimation()
         bst.postorder(bst.getRootNode())
-        bst.getListPostOrder()
+    //    bst.getListPostOrder()
         updateLog()
         setExplain(bst.explain)
         animationPostorder(bst.listAnimation, 0)
@@ -180,7 +180,7 @@ export default function EditorPageString() {
         bst.clearExplain()
         bst.clearListAnimation()
         bst.inorder(bst.getRootNode())
-        bst.getListInOrder()
+    //    bst.getListInOrder()
         updateLog()
         setExplain(bst.explain)
         animationInorder(bst.listAnimation, 0)
@@ -256,7 +256,7 @@ export default function EditorPageString() {
             targetElement.style.animation = 'myAnimation 1s ease-in-out'
             k++
             setTimeout(animationPreOrder, 3000, listData, k)
-        }else{
+        } else {
             showAlert("Preorder", bst.getListPreOrder())
         }
     }
@@ -270,7 +270,7 @@ export default function EditorPageString() {
             targetElement.style.animation = 'myAnimation 1s ease-in-out'
             k++
             setTimeout(animationInorder, 3000, listData, k)
-        }else{
+        } else {
             showAlert("Inorder", bst.getListInOrder())
         }
     }
@@ -284,10 +284,11 @@ export default function EditorPageString() {
             targetElement.style.animation = 'myAnimation 1s ease-in-out'
             k++
             setTimeout(animationPostorder, 3000, listData, k)
-        }else{
+        } else {
             showAlert("Postorder", bst.getListPostOrder())
         }
     }
+
     function animationInsert(listData, k) {
         reset(listData[k])
         if (k < listData.length) {
@@ -365,7 +366,7 @@ export default function EditorPageString() {
             <Icon icon="typcn:arrow-back" className={"absolute text-primary ml-8 top-8"} width="64" height="64"
                   onClick={backToDashboard}/>
 
-            <h1 className={"absolute text-primary ml-28 top-12 font-bold text-xl"}>{projectName}</h1>
+            <h1 className={"absolute text-primary ml-28 top-10 font-bold text-4xl"}>{projectName}</h1>
 
             <aside className="w-36 fixed top-0 inline-block" aria-label="Sidebar">
                 <div className="bg-black">
@@ -530,7 +531,7 @@ export default function EditorPageString() {
                         {/*Export C Start*/}
                         <li className={"border-b-2 border-white"}>
                             <a
-                                onClick={exportCode.bind(this, generateSourceCodeC(logList), "c")}
+                                onClick={exportCode.bind(this, generateSourceCodeC(logList), "C")}
                                 className="flex items-center p-2 text-base font-normal text-gray-900 dark:text-white hover:bg-dark">
                                 <span
                                     className="flex-1 ml-3 whitespace-nowrap text-white text-bold">C</span></a>
@@ -613,7 +614,7 @@ export default function EditorPageString() {
             {/*Render*/}
             <div className="container-editor relative mt-32">
 
-                {<div className="tf-tree tf-custom hover:bg-yellowPrimary bg-black">
+                {<div className="tf-tree tf-custom">
                     <ul>
                         <li className={"transition ease-in-out delay-1150"}>
                             <Tree data={root}/>
