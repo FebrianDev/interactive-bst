@@ -11,9 +11,15 @@ export default function () {
                     {/*Section Left*/}
                     <div className="w-full px-4 mt-20 lg:w-1/2">
                         <h1 className={'block font-bold text-dark text-4xl mb-2'}>Interactive Binary Search Tree</h1>
-                        <p className={'font-medium text-secondary mb-5 leading-relaxed'}>I'm Game Technology Student at Electronic Engineering Polytechnic Institute of Surabaya. I have an interest in Web Development, Android Development, & Game Development
-
-                            technology</p>
+                        <p className={'font-medium text-secondary mb-5 leading-relaxed'}>Interactive Binary Search Tree is a website to learn interactive
+                            Binary Search Tree data structure material, making it easier for
+                            users to understand how the Binary Search Tree works. Here
+                            the user can perform various operations on the Binary Search
+                            Tree, such as insert, delete, search, and traversal. In addition,
+                            users can also generate source code in various programming
+                            languages such as C, C++, C#, Java, and Javascript, where the
+                            source code can be obtained from the result of the Binary
+                            Search Tree operation that has been carried out by the user.</p>
 
                         <div className="flex items-center mb-10 mt-4">
 
