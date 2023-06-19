@@ -15,11 +15,7 @@ export default function () {
                             Binary Search Tree data structure material, making it easier for
                             users to understand how the Binary Search Tree works. Here
                             the user can perform various operations on the Binary Search
-                            Tree, such as insert, delete, search, and traversal. In addition,
-                            users can also generate source code in various programming
-                            languages such as C, C++, C#, Java, and Javascript, where the
-                            source code can be obtained from the result of the Binary
-                            Search Tree operation that has been carried out by the user.</p>
+                            Tree, such as insert, delete, search, traversal, and export source code.</p>
 
                         <div className="flex items-center mb-10 mt-4">
 
