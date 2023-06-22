@@ -37,8 +37,9 @@ export default function Login() {
             data
         ).then(data => {
             console.log(data)
-            if (data.status === "error") {
+            if (data.data.status === "error") {
                 console.log("Error")
+                setErrorState(data.data.message)
                 return
             }
 
